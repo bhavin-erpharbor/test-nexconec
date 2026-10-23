@@ -1,0 +1,295 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<odoo>
+    <template id="scs_customization_basic_layout">
+        <div class="header">
+          <div class="text-center mt-2" id="continued" style="font-size:9px;">CONTINUED...<br/></div>
+          <div class="row">
+            <div class="col-6 p-1" style="font-weight:bold;">
+              <div>NEXCONEC LIMITED</div>
+              <div class="mt-2" style="font-size:10px;">
+                    2007 20F Westley Square
+                    <br/>
+<!--                    <br/>-->
+                    48 Hoi Yuen Road, Kwun Tong, Kowloon
+                    <br/>
+<!--                    <br/>-->
+                    Hong Kong
+                    <br/>
+<!--                    <br/>-->
+                    <div>
+                        <t t-if="not from_po">Email: sales@nexconec.com</t>
+                        <t t-elif="from_po">Email: purchase@nexconec.com</t>
+                        <br/>
+                    </div>
+                    <br/>
+
+                </div>
+            </div>
+            <div class="col-6 text-end">
+                    <img t-if="company.logo" t-att-src="image_data_uri(company.logo)" width="230" height="80" alt="Logo"/>
+                </div>
+          </div>
+          <script type="text/javascript">
+            var x = document.location.search.substring(1).split('&amp;');
+            var z=[],count=0,page,topage;
+            for (var i in x) {
+                z[count] = x[i].split('=', 2);
+                if(z[count][0] == 'page'){ page= z[count][1]; }
+                if(z[count][0] == 'topage'){ topage= z[count][1]; }
+                count++;
+                }
+            document.getElementById("continued").style.visibility = 'hidden'
+            if(page != 1){
+                document.getElementById("continued").style.visibility = 'visible';
+            }
+        </script>
+        </div>
+        <div class="article o_report_layout_standard" t-att-data-oe-model="o and o._name" t-att-data-oe-id="o and o.id" t-att-data-oe-lang="o and o.env.context.get('lang')">
+          <t t-out="0"/>
+        </div>
+        <div class="footer mb32">
+                <div t-if="from_po" class="row mt8" style="padding-left:15px;padding-right:15px;font-size:10px;border-top:2px solid;" id="display">
+                    <div class="col-8" style="font-weight:bold;">NOTES: <span t-field="o.x_purchase_note"/></div>
+                    <div class="col-4">
+                      <div style="width: 107%;">
+                            <div style="justify-content: space-between;">
+                                <div class = "row">
+                                    <div class="col-6">
+                                        <span>SUB TOTAL</span>
+                                    </div>
+                                    <div class="col-6 text-end">
+                                        <span t-field="o.amount_untaxed"/>
+                                    </div>
+                                </div>
+                            </div>
+                            <div style="justify-content: space-between;">
+                                <div class = "row">
+                                    <div class="col-6">
+                                        <span>DISCOUNT</span>
+                                    </div>
+                                    <div class="col-6 text-end">
+                                        <t t-set="total_discount" t-value="0.0"/>
+                                        <!-- <t t-set="d_lines" t-value="o.invoice_line_ids.filtered(lambda x: x.discount &gt; 0)"/>
+                                        <t t-foreach="d_lines" t-as="l">
+                                            <t t-set="total_discount" t-value="(total_discount + (l.price_unit*(l.discount/100)))"/>
+                                        </t> -->
+                                        <span t-esc="total_discount" t-options="{&quot;widget&quot;: &quot;monetary&quot;, &quot;display_currency&quot;: o.currency_id}"/>
+                                    </div>
+                                </div>
+                            </div>
+                            <div style="justify-content: space-between;">
+                                <div class="row">
+                                    <div class="col-6">
+                                        <span>TAX OR DUTIES</span>
+                                    </div>
+                                    <div class="col-6 text-end">
+                                        <span t-field="o.amount_tax"/>
+                                    </div>
+                                </div>
+                            </div>
+                            <div style="border-top:2px solid;">
+                                <div class="row">
+                                    <div class="col-6">
+                                        <span>TOTAL</span>
+                                    </div>
+                                    <div class="col-6 text-end">
+                                        <span t-field="o.amount_total"/>
+                                    </div>
+                                </div>
+                            </div>
+                            <div style="justify-content: space-between;">
+                                <div class="row">
+                                    <div class="col-6">
+                                        <span>CURRENCY</span>
+                                    </div>
+                                    <div class="col-6 text-end">
+                                        <span t-field="o.company_id.currency_id"/>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+              </div>
+              <div t-if="from_invoice" class="row" style="padding-left:15px;padding-right:15px;margin-top:20px;font-size:10px;border-top:2px solid;" id="display">
+                    <div class="col-8" style="font-weight:bold;margin_right:5px;">NOTES: <span t-field="o.x_studio_field_momgh"/></div>
+                    <div class="col-4" >
+                      <div style="width: 107%;">
+                            <div style="justify-content: space-between;">
+                                <div class = "row">
+                                    <div class="col-6">
+                                        <span>SUB TOTAL</span>
+                                    </div>
+                                    <div class="col-6 text-end">
+                                        <span t-field="o.amount_untaxed"/>
+                                    </div>
+                                </div>
+                            </div>
+                            <div style="justify-content: space-between;">
+                                <div class="row">
+                                    <div class="col-6">
+                                        <span>DISCOUNT</span>
+                                    </div>
+                                    <div class="col-6 text-end">
+                                        <t t-set="total_discount" t-value="0.0"/>
+                                        <t t-set="d_lines" t-value="o.invoice_line_ids.filtered(lambda x: x.discount &gt; 0)"/>
+                                        <t t-foreach="d_lines" t-as="l">
+                                            <t t-set="total_discount" t-value="(total_discount + (l.price_unit*(l.discount/100)))"/>
+                                        </t>
+                                        <span t-esc="total_discount" t-options="{&quot;widget&quot;: &quot;monetary&quot;, &quot;display_currency&quot;: o.currency_id}"/>
+                                    </div>
+                                </div>
+                            </div>
+                            <div style="justify-content: space-between;">
+                                <div class="row">
+                                    <div class="col-6">
+                                        <span>TAX OR DUTIES</span>
+                                    </div>
+                                    <div class="col-6 text-end">
+                                        <span t-field="o.amount_tax"/>
+                                    </div>
+                                </div>
+                            </div>
+                            <div style="border-top:2px solid;">
+                                <div class="row">
+                                    <div class="col-6">
+                                        <span>TOTAL</span>
+                                    </div>
+                                    <div class="col-6 text-end">
+                                        <span t-field="o.amount_total"/>
+                                    </div>
+                                </div>
+                            </div>
+                            <div style="justify-content: space-between;">
+                                <div class = "row">
+                                    <div class="col-6">
+                                        <span>CURRENCY</span>
+                                    </div>
+                                    <div class="col-6 text-end">
+                                        <span t-field="o.company_id.currency_id"/>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+              </div>
+              <div t-if="from_sale" class="row" style="padding-left:20px;padding-right:15px;margin-top:10px;font-size:10px; border-top:2px solid;"  id="display">
+                <div class="col-8 text-start" style="font-weight:bold;">
+                    NOTES: <span t-field="o.x_sale_note"/>
+                </div>
+                <div class="col-4">
+                      <div style="width: 107%;">
+                            <div style="justify-content: space-between;">
+                                <div class = "row">
+                                    <div class="col-6">
+                                        <span>SUB TOTAL</span>
+                                    </div>
+                                    <div class="col-6 text-end">
+                                        <span t-field="o.amount_untaxed"/>
+                                    </div>
+                                </div>
+                            </div>
+                            <div style="justify-content: space-between;">
+                                <div class = "row">
+                                    <div class="col-6">
+                                        <span>DISCOUNT</span>
+                                    </div>
+                                    <div class="col-6 text-end">
+                                        <t t-set="total_discount" t-value="0.0"/>
+                                        <t t-set="d_lines" t-value="o.order_line.filtered(lambda x: x.discount &gt; 0)"/>
+                                        <t t-foreach="d_lines" t-as="l">
+                                            <t t-set="total_discount" t-value="(total_discount + (l.price_unit*(l.discount/100)))"/>
+                                        </t>
+                                        <span t-esc="total_discount" t-options="{&quot;widget&quot;: &quot;monetary&quot;, &quot;display_currency&quot;: o.currency_id}"/>
+                                    </div>
+                                </div>
+                            </div>
+                            <div style="justify-content: space-between;">
+                                <div class = "row">
+                                    <div class="col-6">
+                                        <span>TAX OR DUTIES</span>
+                                    </div>
+                                    <div class="col-6 text-end">
+                                        <span t-field="o.amount_tax"/>
+                                    </div>
+                                </div>
+                            </div>
+                            <div style="border-top:2px solid;">
+                                <div class = "row">
+                                    <div class="col-6">
+                                        <span>TOTAL</span>
+                                    </div>
+                                    <div class="col-6 text-end">
+                                        <span t-field="o.amount_total"/>
+                                    </div>
+                                </div>
+                            </div>
+                            <div style="justify-content: space-between;">
+                                <div class = "row">
+                                    <div class="col-6">
+                                        <span>CURRENCY</span>
+                                    </div>
+                                    <div class="col-6 text-end">
+                                        <span t-field="o.company_id.currency_id"/>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+              </div>
+            <div t-if="from_pick" class="row" style="padding-left:20px;padding-right:15px;margin-top:5px;font-size:10px; border-top:2px solid;"  id="display">
+            </div>
+              <div class="row text-center mt32 mb32" style="font-size:9px;">
+                <div class="col-2 text-left">www.nexconec.com</div>
+                <div class="col-8">
+                  <t t-if="not from_po">
+                        BENEFICIARY NAME: NEXCONEC LIMITED ACCOUNT NUMBER: 817 887979 838
+                        <br/>
+                        <br/>
+                        BANK NAME: HSBC HONG KONG BANK ADDRESS: 1 QUEEN’S ROAD CENTRAL HONG KONG
+                        <br/>
+                        <br/>
+                        BANK CODE: 004 SWIFT CODE: HSBCHKHHHKH
+                    </t>
+                </div>
+                <div class="col-2 text-right">
+                    Page: <span class="page"/>
+                </div>
+              </div>
+              <div class="text-center mt8" id="next_page" style="font-size:9px;">CONTINUE TO NEXT PAGE</div>
+              <script type="text/javascript">
+                var x = document.location.search.substring(1).split('&amp;');
+                var z=[],count=0,page,topage;
+                for (var i in x) {
+                    z[count] = x[i].split('=', 2);
+                    if(z[count][0] == 'page'){ page= z[count][1]; }
+                    if(z[count][0] == 'topage'){ topage= z[count][1]; }
+                    count++;
+                    }
+                document.getElementById("display").style.visibility = 'hidden'
+                document.getElementById("next_page").style.visibility = 'visible'
+                if(page == topage){
+                    document.getElementById("display").style.visibility = 'visible';
+                    document.getElementById("next_page").style.visibility = 'hidden';
+                    }
+              </script>
+            </div>
+    </template>
+
+
+    <record id="paperformat_nexconec_report" model="report.paperformat">
+        <field name="name">Nexconec Report</field>
+        <field name="default" eval="True"/>
+        <field name="format">custom</field>
+        <field name="page_height">297</field>
+        <field name="page_width">210</field>
+        <field name="orientation">Portrait</field>
+        <field name="margin_top">30</field>
+        <field name="margin_bottom">45</field>
+        <field name="margin_left">5</field>
+        <field name="margin_right">5</field>
+        <field name="header_line" eval="False"/>
+        <field name="header_spacing">30</field>
+        <field name="dpi">90</field>
+    </record>
+
+</odoo>

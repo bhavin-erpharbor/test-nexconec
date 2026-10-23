@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <template id="external_layout_standard_custom" inherit_id="web.external_layout_standard">
+        <div t-attf-class="header o_company_#{company.id}_layout" position="replace">
+            <div t-attf-class="header o_company_#{company.id}_layout">
+                <div class="row">
+                    <div class="col-9  ml-2" name="company_address" style="font-size: 20px; color:#026497;"  
+                        t-field="company.partner_id"
+                        t-options='{"widget": "contact", "fields": ["address", "name"], "no_marker": True}'/>
+                    <div class="col-3 mr-2" >
+                       <img t-if="company.logo" t-att-src="image_data_uri(company.logo)" style="max-height:220px;max-width:220px" alt="Logo"/>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="o_footer_content d-flex border-top pt-2"  position="replace">
+            <div class="o_footer_content border-top pt-2" style="border-top: 1px solid #76909e;">
+                <div class="list-inline mb4 font-weight-light font-italic" style="font-size: 14px; color:#76909e">
+                    <!-- using the list-inline-item class from bootstrap causes weird behaviours in pdf report
+                         adding d-inline class fixes the problem-->
+                    <li t-if="company.phone" class="list-inline-item d-inline">Phone: <span t-field="company.phone"/></li>
+                    <li t-if="company.email" class="list-inline-item d-inline"><span t-field="company.email"/></li>
+                     <li t-if="company.website" class="list-inline-item d-inline"><span t-field="company.website"/></li>
+<!--                     <li t-if="company.website" class="list-inline-item d-inline">Siret: <span t-field="company.siret"/></li>-->
+                     <li class="list-inline-item d-inline">Capital: <span t-field="res_company.partner_id.x_studio_capital_social"/></li>
+                    <li t-if="company.vat" class="list-inline-item d-inline">
+                     <t t-esc="company.country_id.vat_label or 'Tax ID'"/>: <span t-field="company.vat"/>
+                    </li>
+                </div>
+                <div t-if="report_type == 'pdf'" class="text-center text-muted">
+                    Page: <span class="page"/> / <span class="topage"/>
+                </div>
+            </div>
+        </div>
+       <!-- <div t-attf-class="article o_report_layout_standard o_company_#{company.id}_layout {{  'o_report_layout_background' if company.layout_background in ['Geometric', 'Custom']  else  '' }}" t-attf-style="background-image: url({{ 'data:image/png;base64,%s' % company.layout_background_image.decode('utf-8') if company.layout_background_image and company.layout_background == 'Custom' else '/base/static/img/bg_background_template.jpg' if company.layout_background == 'Geometric' else ''}});" t-att-data-oe-model="o and o._name" t-att-data-oe-id="o and o.id" t-att-data-oe-lang="o and o.env.context.get('lang')" position="replace">
+            <div t-attf-class="article o_report_layout_standard o_company_#{company.id}_layout {{  'o_report_layout_background' if company.layout_background in ['Geometric', 'Custom']  else  '' }}" t-attf-style="background-image: url({{ 'data:image/png;base64,%s' % company.layout_background_image.decode('utf-8') if company.layout_background_image and company.layout_background == 'Custom' else '/base/static/img/bg_background_template.jpg' if company.layout_background == 'Geometric' else ''}});" t-att-data-oe-model="o and o._name" t-att-data-oe-id="o and o.id" t-att-data-oe-lang="o and o.env.context.get('lang')">
+                <t t-call="web.address_layout"/>
+                <t t-raw="0"/>
+            </div>
+        </div> -->
+    </template>
+
+    <template id="address_layout" inherit_id="web.address_layout">
+        <xpath expr="//div[@name='information_block']" position="attributes">
+            <attribute name="class">col-6</attribute>
+        </xpath>
+    </template>
+
+</odoo>

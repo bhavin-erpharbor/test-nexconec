@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+    <record id="res_config_settings_view_form_inherit_ehcs_france_product_db_sync" model="ir.ui.view">
+        <field name="name">res.config.settings.view.form.inherit.ehcs.france.product.db.sync</field>
+        <field name="model">res.config.settings</field>
+        <field name="inherit_id" ref="base.res_config_settings_view_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//form" position="inside">
+                <app string="France → Hong Kong Product Sync" name="ehcs_france_product_db_sync">
+                    <block title="Hong Kong Remote Database">
+                        <setting string="Enable Sync">
+                            <field name="ehcs_product_sync_enabled"/>
+                        </setting>
+                        <setting string="Enable Auto Sync on Product Changes">
+                            <field name="ehcs_product_auto_sync_enabled"/>
+                        </setting>
+                        <setting string="Remote URL">
+                            <field name="ehcs_remote_odoo_url" placeholder="https://hongkong.example.com"/>
+                        </setting>
+                        <setting string="Remote Database">
+                            <field name="ehcs_remote_odoo_db" placeholder="hongkong_db_name"/>
+                        </setting>
+                        <setting string="Remote Username">
+                            <field name="ehcs_remote_odoo_username" placeholder="admin@example.com"/>
+                        </setting>
+                        <setting string="Remote Password">
+                            <field name="ehcs_remote_odoo_password" password="True" placeholder="Password"/>
+                        </setting>
+                        <setting string="Actions">
+                            <button name="action_ehcs_test_remote_connection" type="object" string="Test Connection" class="btn-secondary"/>
+                            <button name="action_ehcs_sync_product_attributes_now" type="object" string="Sync Product Attributes Now" class="btn-primary ms-2"/>
+                            <button name="action_ehcs_sync_products_now" type="object" string="Sync Products Now" class="btn-primary ms-2"/>
+                        </setting>
+                    </block>
+                </app>
+            </xpath>
+        </field>
+    </record>
+</odoo>

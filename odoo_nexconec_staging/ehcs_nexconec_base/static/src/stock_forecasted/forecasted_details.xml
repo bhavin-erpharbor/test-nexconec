@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <template t-name="ehcs_nexconec_base.stock_forecasted_details_inherit" t-inherit="stock.ForecastedDetails" t-inherit-mode="extension">
+        <xpath expr="//table[1]/thead[1]/tr[1]/td[2]" position="replace">
+            <td>ETA</td>
+        </xpath>
+    </template>
+</odoo>

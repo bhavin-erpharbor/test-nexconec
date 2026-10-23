@@ -1,0 +1,14 @@
+The following relational data haven't been exported because they either refer
+to a model that Studio doesn't export, or have no XML id:
+
+Record: studio_customization.nexconec_rfq_po_ff93137d-816e-4ce4-9028-19f51bbed24f
+Model: ir.actions.report
+Field: paperformat_id
+Type: many2one
+Value: report.paperformat(4,) ('custom A4 (hpr)')
+
+Record: studio_customization.nexconec_rfq_purchas_e038bc4e-d6d7-4c27-9fee-6b68766e6a8e
+Model: ir.actions.report
+Field: paperformat_id
+Type: many2one
+Value: report.paperformat(4,) ('custom A4 (hpr)')

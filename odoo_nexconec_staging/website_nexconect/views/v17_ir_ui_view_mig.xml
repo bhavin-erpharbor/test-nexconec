@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<odoo>
+    <!-- Added below function to fix test upgrade in v17 -->
+    <function name="_deactivate_unnecessary_views" model="ir.ui.view">
+        <value
+            model="ir.ui.view"
+            search="[('name', '=', 'Product other Details'),('key', '=', 'website_nexconect.product_other_info'),('type', '=', 'qweb')]"
+        />
+    </function>
+    <!-- <function name="_deactivate_unnecessary_views" model="ir.ui.view">
+        <value
+            model="ir.ui.view"
+            search="[('name', '=', 'Footer Language Selector Flag'),('key', '=', 'website_sale.footer_language_selector_flag'),('type', '=', 'qweb')]"
+        />
+    </function> -->
+</odoo>

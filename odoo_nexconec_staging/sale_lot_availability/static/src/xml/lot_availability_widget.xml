@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<templates xml:space="preserve">
+
+    <t t-name="sale_lot_availability.LotAvailabilityField" owl="1">
+        <span
+            t-att-class="badgeClass"
+            t-att-title="tooltipContent"
+            style="cursor: help; white-space: pre;"
+        >
+            <t t-esc="count"/> lot(s)
+        </span>
+    </t>
+
+</templates>

@@ -1,0 +1,24 @@
+<odoo>
+
+    <template id="portal_my_quotations_extended" inherit_id="sale.portal_my_quotations">
+        <xpath expr="//t[@t-if='quotations']/thead/tr" position="inside">
+            <th class="text-center"/>
+        </xpath>
+        <xpath expr="//t[@t-foreach='quotations']/tr" position="inside">
+            <td>
+                <a t-if="quotation.save_from_cart" role="button"
+                   t-att-href="'/shop/cart/add_from_portal?order_id=' + str(quotation.id)"
+                   style="padding: 1px 6px;border: 1px outset buttonborder;border-radius: 3px;color: white;background-color: #685563;text-decoration:none;">Open In Shop
+                </a>
+            </td>
+        </xpath>
+    </template>
+
+    <template id="portal_my_home_sale_nextconec" name="Show Quotations / Sales Orders" customize_show="True" inherit_id="sale.portal_my_home_sale">
+        <!-- Display quotation button on portal view -->
+        <xpath expr="//div[@id='portal_alert_category']/t[@t-call='portal.portal_docs_entry']" position="inside">
+            <t t-set="config_card" t-value="True"/>
+        </xpath>
+    </template>
+
+</odoo>

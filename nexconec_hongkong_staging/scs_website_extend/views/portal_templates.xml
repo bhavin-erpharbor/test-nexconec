@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <template id="user_dropdown" inherit_id="portal.user_dropdown">
+        <xpath expr="//li" position="after">
+            <li t-if="is_connected" t-attf-class="#{_item_class} o_no_autohide_item dropdown">
+                <a href="#" role="button" aria-expanded="false" data-bs-toggle="dropdown" t-attf-class="#{'' if _no_caret else 'dropdown-toggle'} btn #{_link_class}">
+                    <span>My Docs</span>
+                </a>
+                <div t-attf-class="dropdown-menu js_usermenu #{_dropdown_menu_class}" role="menu">
+                    <a href="/my/invoices" role="menuitem" class="dropdown-item ps-3">My Bills</a>
+                    <a href="/my/purchase" role="menuitem" class="dropdown-item ps-3">My Purchase Orders</a>
+                    <a href="/my/quotes" role="menuitem" class="dropdown-item ps-3">My Quotes</a>
+                </div>
+            </li>
+        </xpath>
+    </template>
+</odoo>

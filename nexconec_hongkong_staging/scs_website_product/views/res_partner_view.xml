@@ -1,0 +1,17 @@
+<odoo>
+    <record id="view_partner_form_view_inherit_nexconect" model="ir.ui.view">
+        <field name="name">res.partner.form.inherit</field>
+        <field name="model">res.partner</field>
+        <field name="inherit_id" ref="base.view_partner_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//notebook//page[last()]" position="after">
+                <page string="Categories">
+                    <field name="public_categ_ids"/>
+                </page>
+            </xpath>
+             <xpath expr="//field[@name='property_delivery_carrier_id']" position="after">
+                <field name="product_category_id"/>
+            </xpath>
+        </field>
+    </record>
+</odoo>

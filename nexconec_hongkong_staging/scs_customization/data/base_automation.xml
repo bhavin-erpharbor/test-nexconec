@@ -1,0 +1,18 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<odoo>
+  <record id="scs_customization.set_so_0c03ecfa-5243-4202-81a2-6248e6a81464" model="base.automation" context="{'studio': True}">
+    <field name="action_server_ids" eval="[(6, 0, [ref('scs_customization.set_so_2f8d606f-4e0d-42d4-bc06-cc0435c4e3b0')])]"/>
+    <!-- <field name="action_server_id" ref="scs_customization.set_so_2f8d606f-4e0d-42d4-bc06-cc0435c4e3b0"/> -->
+    <field name="active" eval="True"/>
+    <field name="filter_domain" eval="False"/>
+    <field name="filter_pre_domain" eval="False"/>
+    <field name="last_run" eval="False"/>
+    <field name="model_id" ref="purchase.model_purchase_order"/>
+    <field name="name">set SO</field>
+    <field name="on_change_field_ids" eval="[(6, 0, [])]"/>
+    <field name="trg_date_id" eval="False"/>
+    <field name="trg_date_range" eval="False"/>
+    <field name="trg_date_range_type" eval="False"/>
+    <field name="trigger">on_create</field>
+  </record>
+</odoo>

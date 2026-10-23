@@ -1,0 +1,90 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<odoo>
+    <record id="scs_customization.nexconec_rfq_po_ff93137d-816e-4ce4-9028-19f51bbed24f" model="ir.actions.report" context="{'studio': True}">
+        <field name="name">Nexconec RFQ / PO</field>
+        <field name="model">purchase.order</field>
+        <field name="report_type">qweb-pdf</field>
+        <field name="report_name">scs_customization.report_purchaseorder_nexconce_po</field>
+        <field name="report_file">scs_customization.report_purchaseorder_nexconce_po</field>
+        <field name="print_report_name">(object.state in ('draft', 'sent') and 'RFQ_'+(object.name) or (object.name))</field>
+        <field name="binding_model_id" ref="model_purchase_order"/>
+        <field name="paperformat_id" ref="scs_customization.paperformat_nexconec_report"/>
+        <field name="binding_type">report</field>
+    </record>
+    <record id="scs_customization.nexconec_rfq_purchas_e038bc4e-d6d7-4c27-9fee-6b68766e6a8e" model="ir.actions.report" context="{'studio': True}">
+        <field name="name">Nexconec RFQ / PO - NO SHIP TO</field>
+        <field name="model">purchase.order</field>
+        <field name="report_type">qweb-pdf</field>
+        <field name="report_name">scs_customization.report_purchaseorder_nexconce_po_no_ship</field>
+        <field name="report_file">scs_customization.report_purchaseorder_nexconce_po_no_ship</field>
+        <field name="print_report_name">(object.state in ('draft', 'sent') and 'RFQ_'+(object.name) or (object.name))</field>
+        <field name="binding_model_id" ref="model_purchase_order"/>
+        <field name="paperformat_id" ref="scs_customization.paperformat_nexconec_report"/>
+        <field name="binding_type">report</field>
+    </record>
+
+    <record id="scs_customization.report_saleorder_hpr" model="ir.actions.report" context="{'studio': True}">
+        <field name="name">Nexconec Quotation / SO</field>
+        <field name="model">sale.order</field>
+        <field name="report_type">qweb-pdf</field>
+        <field name="report_name">scs_customization.report_saleorder_nexconce_so</field>
+        <field name="report_file">scs_customization.report_saleorder_nexconce_so</field>
+        <field name="print_report_name">(object.state in ('draft', 'sent') and 'Quotation_'+(object.name) or (object.name))</field>
+        <field name="binding_model_id" ref="model_sale_order"/>
+        <field name="paperformat_id" ref="scs_customization.paperformat_nexconec_report"/>
+        <field name="binding_type">report</field>
+    </record>
+
+    <record id="scs_customization.report_saleorder_proforma_hpr" model="ir.actions.report">
+        <field name="name">Nexconec Proforma Invoice</field>
+        <field name="model">sale.order</field>
+        <field name="report_type">qweb-pdf</field>
+        <field name="report_name">scs_customization.report_saleorder_nexconce_so_pro_forma</field>
+        <field name="report_file">scs_customization.report_saleorder_nexconce_so_pro_forma</field>
+        <field name="print_report_name">('PI_'+(object.name)+'_'+(object.client_order_ref))</field>
+        <field name="binding_model_id" ref="model_sale_order"/>
+        <field name="binding_type">report</field>
+        <field name="paperformat_id" ref="scs_customization.paperformat_nexconec_report"/>
+        <field name="group_ids" eval="[(4, ref('sale.group_proforma_sales'))]"/>
+    </record>
+
+
+    <record id="scs_customization.report_account_move_document_hpr" model="ir.actions.report">
+        <field name="name">Nexconec Invoice</field>
+        <field name="model">account.move</field>
+        <field name="report_type">qweb-pdf</field>
+        <field name="report_name">scs_customization.nexconec_report_invoice</field>
+        <field name="report_file">scs_customization.nexconec_report_invoice</field>
+        <field name="print_report_name">((object.move_type == 'out_refund') and 'Refund'+'_'+ (((object.name)+'_'+(object.ref and object.ref)) or '')or 'SI_'+(object.name)+'_'+(object.ref and object.ref and object.ref or '')) </field>
+        <field name="binding_model_id" ref="model_account_move"/>
+        <field name="paperformat_id" ref="scs_customization.paperformat_nexconec_report"/>
+        <field name="binding_type">report</field>
+    </record>
+
+    <record id="action_report_delivery_slip" model="ir.actions.report">
+        <field name="name">Nexconec Delivery Slip</field>
+        <field name="model">stock.picking</field>
+        <field name="report_type">qweb-pdf</field>
+        <field name="report_name">scs_customization.nexconec_report_delivery_slip</field>
+        <field name="report_file">scs_customization.nexconec_report_delivery_slip</field>
+        <field name="print_report_name">'Delivery Slip - %s - %s' % (object.partner_id.name or '', object.name)</field>
+        <field name="binding_model_id" ref="stock.model_stock_picking"/>
+        <field name="paperformat_id" ref="scs_customization.paperformat_nexconec_report"/>
+        <field name="binding_type">report</field>
+    </record>
+
+  <record id="scs_customization.sales_orders_statist_ede4fb9a-d4a6-4600-9aef-5b79a78ad1b9" model="ir.actions.report" context="{'studio': True}">
+    <field name="attachment" eval="False"/>
+    <field name="attachment_use" eval="False"/>
+    <field name="binding_model_id" eval="False"/>
+    <field name="binding_type">action</field>
+    <field name="binding_view_types">list,form</field>
+    <field name="group_ids" eval="[(6, 0, [])]"/>
+    <field name="model">sale.report</field>
+    <field name="multi" eval="False"/>
+    <field name="name">Sales Orders Statistics Report</field>
+    <field name="paperformat_id" eval="False"/>
+    <field name="report_name">scs_customization.report_b51c0350-46b5-484c-8157-c75c1cb5e4af</field>
+    <field name="report_type">qweb-pdf</field>
+  </record>
+</odoo>

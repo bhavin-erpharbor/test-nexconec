@@ -1,0 +1,21 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<odoo>
+  <record id="scs_customization.sales_test_product_43b58349-4f8f-40f3-9f22-59b6ea32a355" model="ir.ui.menu" context="{'studio': True}">
+    <field name="action" ref="scs_customization.test_product_cb2a6b39-eca5-491a-b935-254457b9d924"/>
+    <field name="active" eval="False"/>
+    <field name="group_ids" eval="[(6, 0, [])]"/>
+    <field name="name">test product</field>
+    <field name="parent_id" ref="sale.sale_menu_root"/>
+    <field name="sequence">10</field>
+    <field name="web_icon" eval="False"/>
+  </record>
+  <record id="scs_customization.sales_test_product_82def572-b5e7-4bf5-88b8-2a823207c7c4" model="ir.ui.menu" context="{'studio': True}">
+    <field name="action" ref="scs_customization.test_product_65814988-d727-4785-9199-f2701f3e3d8f"/>
+    <field name="active" eval="False"/>
+    <field name="group_ids" eval="[(6, 0, [])]"/>
+    <field name="name">test product</field>
+    <field name="parent_id" ref="sale.sale_menu_root"/>
+    <field name="sequence">10</field>
+    <field name="web_icon" eval="False"/>
+  </record>
+</odoo>

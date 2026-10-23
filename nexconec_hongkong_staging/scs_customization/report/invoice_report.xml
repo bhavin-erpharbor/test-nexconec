@@ -1,0 +1,233 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<odoo>
+    <template id="report_invoice_document_hpr">
+        <t t-call="web.basic_layout">
+            <t t-set="company" t-value="o.company_id"/>
+            <t t-set="o" t-value="o.with_context(lang=o.partner_id.lang)"/>
+            <t t-set="from_invoice" t-value="1"/>
+            <t t-set="o" t-value="o.with_context({'lang':o.partner_id.lang})"/>
+            <t t-call="scs_customization.scs_customization_basic_layout"/>
+            <div class="page" t-if="o.state != 'draft' or o.move_type == 'out_refund'">
+                <style>
+                    .total-table td:first-child{
+                        font-size:11px;
+                        font-weight:bold;
+                    }
+                    .total-table td:last-child{
+                        text-align:right;
+                        padding-right:3px;
+                    }
+                    .vlm{
+                        vertical-align:middle;
+                    }
+                </style>
+                <div class="row mb32">
+                    <div t-if="o.move_type not in ['out_refund']" class="text-center" style="font-weight:bold;font-size:15px; margin-top: 40px;">SALES INVOICE</div>
+                    <div t-elif="o.move_type in ['out_refund']" class="text-center" style="font-weight:bold;font-size:15px; margin-top: 40px;">REFUND INVOICE</div>
+                </div>
+                <div class="row" style="font-size:10px;font-weight:bold;">
+                  <div class="col-3 p-1" style="background-color:#D9D9D9;">
+                        INVOICE TO
+                    </div>
+                  <div class="col-1"/>
+                  <div class="col-3 p-1" style="background-color:#D9D9D9;">
+                        SHIP TO
+                    </div>
+                  <div class="col-1"/>
+                  <div class="col-4 p-1" style="background-color:#D9D9D9;">
+                        COMMERCIAL DETAILS
+                    </div>
+                </div>
+                <t t-set="sale_name" t-value="o.invoice_origin and o.invoice_origin.split(', ')[len(o.invoice_origin.split(', ')) - 1]"/>
+                <t t-set="related_sale" t-value="env['sale.order'].search([('name','=',sale_name)])"/>
+                <div class="row" style="font-size:10px;">
+                  <div class="col-3 mt-1">
+                    <div class="mt-2" t-if="related_sale" t-esc="related_sale.x_attn_jzh"/>
+                    <div class="mt-2" t-field="o.partner_id.name"/>
+                    <div class="mt-2" t-field="o.partner_id.parent_id.name"/>
+                    <div class="mt-2" t-field="o.partner_id.street"/>
+                    <div class="mt-2" t-field="o.partner_id.street2"/>
+                    <div class="mt-1">
+                      <span t-field="o.partner_id.city"/>
+                      <t t-if="o.partner_id.city and o.partner_id.state_id">, </t>
+                      <span t-field="o.partner_id.state_id"/>
+                      <t t-if="o.partner_id.country_id">,</t>
+                      <span t-field="o.partner_id.country_id"/>
+                    </div>
+                    <div class="mt-1" t-if="o.partner_id.zip">
+                      <span>ZIP CODE</span>
+                      <span t-field="o.partner_id.zip"/>
+                    </div>
+                    <div class="mt-1" t-if="o.partner_id.vat">
+                      <span>TAX:</span>
+                      <span t-field="o.partner_id.vat"/>
+                    </div>
+                    <div class="mt-2" t-field="o.partner_id.email"/>
+                    <div class="mt-2" t-field="o.partner_id.phone"/>
+                    <!-- <div t-field="o.partner_id" t-options="{&quot;widget&quot;: &quot;contact&quot;, &quot;fields&quot;: [&quot;address&quot;, &quot;phone&quot;, &quot;fax&quot;], &quot;no_marker&quot;: True, &quot;phone_icons&quot;: True}"/> -->
+                  </div>
+                  <div class="col-1"/>
+                  <div class="col-3 mt-1">
+                    <div class="mt-2" t-field="o.partner_shipping_id.name"/>
+                    <div class="mt-2" t-field="o.partner_shipping_id.parent_id.name"/>
+                    <div class="mt-2" t-field="o.partner_shipping_id.street"/>
+                    <div class="mt-2" t-field="o.partner_shipping_id.street2"/>
+                    <div class="mt-1">
+                      <span t-field="o.partner_shipping_id.city"/>
+                      <t t-if="o.partner_shipping_id.city and o.partner_shipping_id.state_id">, </t>
+                      <span t-field="o.partner_shipping_id.state_id"/>
+                      <t t-if="o.partner_shipping_id.country_id">,</t>
+                      <span t-field="o.partner_shipping_id.country_id"/>
+                    </div>
+                    <div class="mt-1" t-if="o.partner_shipping_id.zip">
+                      <span>ZIP CODE</span>
+                      <span t-field="o.partner_shipping_id.zip"/>
+                    </div>
+                    <div class="mt-2" t-field="o.partner_shipping_id.email"/>
+                    <div class="mt-2" t-field="o.partner_shipping_id.phone"/>
+                    <!-- <div t-field="o.partner_shipping_id" t-options="{&quot;widget&quot;: &quot;contact&quot;, &quot;fields&quot;: [&quot;address&quot;, &quot;phone&quot;, &quot;fax&quot;], &quot;no_marker&quot;: True, &quot;phone_icons&quot;: True}"/> -->
+                  </div>
+                  <div class="col-1"/>
+                  <div class="col-4 ">
+                    <div style="width: 100%;">
+                      <div class="mt-2" style="width: 50%; float: left;">DATE</div>
+                      <div style="float: left;">
+                        <span t-field="o.invoice_date"/>
+                      </div>
+                      <div style="clear: both;"></div>
+                    </div>
+
+                    <div style="width: 100%; font-size:10px;">
+                      <div class="mt-1" style="width: 50%; float: left;">INVOICE NO</div>
+                      <div t-if="o.state not in ['draft', 'proforma', 'proforma2']" style="float: left;">
+                        <span t-field="o.name"/>
+                      </div>
+                      <div t-if="o.state in ['draft', 'proforma', 'proforma2']" style="float: left;">
+                        <span t-field="o.origin"/>
+                      </div>
+                      <div style="clear: both;"></div>
+                    </div>
+
+                    <div style="width: 100%;">
+                      <div class="mt-1" style="width: 50%; float: left;">CUSTOMER PO NO</div>
+                      <div style="overflow: hidden;">
+                          <div style="float: left;">
+                            <span t-field="o.ref"/>
+                          </div>
+                      </div>
+                      <div style="clear: both;"></div>
+                    </div>
+
+                    <div style="width: 100%;">
+                      <div class="mt-1" style="width: 50%; float: left;">INCOTERMS</div>
+                      <div style="float: left;">
+                        <span t-field="o.invoice_incoterm_id"/>
+                      </div>
+                      <div style="clear: both;"></div>
+                    </div>
+
+                    <div style="width: 100%;">
+                      <div class="mt-1" style="width: 50%; float: left;">SHIPPING METHOD</div>
+                      <div style="float: left;">
+                        <span t-field="o.x_delivery_inv"/>
+                      </div>
+                      <div style="clear: both;"></div>
+                    </div>
+
+                    <div style="width: 100%;">
+                      <div class="mt-1" style="width: 50%; float: left;">PAYMENT TERMS</div>
+                      <div style="float: left;">
+                        <span t-field="o.invoice_payment_term_id"/>
+                      </div>
+                      <div style="clear: both;"></div>
+                    </div>
+
+                    <div style="width: 100%;">
+                      <div class="mt-1" style="width: 50%; float: left;">SALES PERSON</div>
+                      <div style="float: left;">
+                        <span t-field="o.invoice_user_id"/>
+                      </div>
+                      <div style="clear: both;"></div>
+                    </div>
+
+                  </div>
+                </div>
+                <!-- <t t-set="s" t-value="(len(o.invoice_line_ids)/12.0)"/> -->
+                <!-- <t t-set="main_lines" t-value="s if int(s) == s else int(s)+1"/> -->
+                <!-- <t t-set="line_no" t-value="1"/> -->
+                <!-- <t t-foreach="main_lines" t-as="l"> -->
+                <!-- <t t-set="l" t-value="l+1"/> -->
+                <!-- <t t-set="total_per_page" t-value="0.0"/> -->
+                <div class="row mt8">
+                  <div class="col-12">
+                    <table class="table table-borderless" width="100%" style="font-size:10px;">
+                      <thead>
+                        <tr style="font-size:11px;background-color:#D9D9D9;height:25px;margin-top:10px;">
+                          <th class="vlm" style="padding-left:3px;"><strong>LINE NO</strong></th>
+                          <th class="vlm text-center"><strong>PART NUMBER</strong></th>
+                          <th width="51%" class="vlm text-center"><strong>DESCRIPTION</strong></th>
+                          <th class="vlm"><strong>UOM</strong></th>
+                          <th class="text-right vlm"><strong>QTY</strong></th>
+                          <th class="text-right vlm"><strong>UNIT PRICE</strong></th>
+                          <th class="text-right vlm" style="padding-right:3px;"><strong>SUB TOTAL</strong></th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        <t t-foreach="o.invoice_line_ids" t-as="line">
+                            <t t-set="partner_hs_line"
+                                t-value="line.product_id.hs_code_line_ids.filtered(lambda l: l.partner_id.id == o.partner_id.id)[:1]"/>
+                          <t t-if="line.product_id.default_code">
+                            <t t-set="str_name" t-value="'['+line.product_id.default_code+'] '+line.product_id.name"/>
+                          </t>
+                          <t t-if="not line.product_id.default_code">
+                            <t t-set="str_name" t-value="line.product_id.name"/>
+                          </t>
+                          <tr>
+                            <td style="padding-left:3px;text-align:center;">
+                              <span t-esc="line_index + 1"/>
+                            </td>
+                            <!-- <t t-set="line_no" t-value="line_no +1"/> -->
+                            <td>
+                              <span t-field="line.product_id.name"/>
+                            </td>
+                            <td>
+                              <span t-esc="line.name.replace(str_name,'')"/>
+                              <br/>
+                              <span t-if="partner_hs_line">HS Code: <span t-esc="partner_hs_line.hs_code"/></span>
+                            </td>
+                            <td>
+                              <span t-field="line.product_uom_id"/>
+                            </td>
+                            <td class="text-right">
+                              <span t-esc="'%.3f'%line.quantity"/>
+                            </td>
+                            <td class="text-right">
+                              <span t-field="line.price_unit"/>
+                            </td>
+                            <td class="text-right" style="padding-right:3px;">
+                              <span t-field="line.price_subtotal"/>
+                            </td>
+                            <!-- <t t-set="total_per_page" t-value="total_per_page + line.price_subtotal"/> -->
+                          </tr>
+                          <tr>
+                            <td colspan="7">&amp;nbsp;</td>
+                            <!-- <td align="right"><strong>Total</strong></td> -->
+                            <!-- <td align="right"><strong><span t-esc="total_per_page"/></strong></td> -->
+                          </tr>
+                        </t>
+                      </tbody>
+                    </table>
+                  </div>
+                </div>
+                <!-- </t> -->
+            </div>
+        </t>
+    </template>
+    <template id="nexconec_report_invoice">
+        <t t-call="web.html_container">
+            <t t-foreach="docs" t-as="o">
+                <t t-call="scs_customization.report_invoice_document_hpr" t-lang="o.partner_id.lang"/>
+            </t>
+        </t>
+    </template>
+</odoo>

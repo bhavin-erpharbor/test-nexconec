@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<templates xml:space="preserve">
+
+    <t t-name="website_nexconect.CableCuttingDialog">
+        <Dialog title="'Add Cutting Length'" size="'lg'">
+
+            <div class="alert alert-info">
+                Product:
+                <strong>
+                    <t t-esc="props.productName"/>
+                </strong>
+            </div>
+
+            <table class="table table-bordered align-middle">
+                <thead>
+                    <tr>
+                        <th>Pieces</th>
+                        <th>Length</th>
+                        <th>Total</th>
+                        <th>Action</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <t t-foreach="state.lines" t-as="line" t-key="line_index">
+                        <tr>
+                            <td>
+                                <input type="number"
+                                       class="form-control"
+                                       min="1"
+                                       step="1"
+                                       t-att-value="line.pieces"
+                                       t-on-input="(ev) => this.updateLine(line_index, 'pieces', ev.target.value)"/>
+                            </td>
+                            <td>
+                                <input type="number"
+                                       class="form-control"
+                                       min="0.01"
+                                       step="0.01"
+                                       t-att-value="line.length"
+                                       t-on-input="(ev) => this.updateLine(line_index, 'length', ev.target.value)"/>
+                            </td>
+                            <td>
+                                <t t-esc="this.getLineTotal(line).toFixed(2)"/>
+                            </td>
+                            <td>
+                                <button type="button"
+                                        class="btn btn-danger btn-sm"
+                                        t-on-click="() => this.removeLine(line_index)">
+                                    Remove
+                                </button>
+                            </td>
+                        </tr>
+                    </t>
+                </tbody>
+            </table>
+
+            <button type="button"
+                    class="btn btn-secondary"
+                    t-on-click="addLine">
+                Add Line
+            </button>
+
+            <div class="mt-3">
+                <strong>Total Length:</strong>
+                <span>
+                    <t t-esc="grandTotal.toFixed(2)"/>
+                </span>
+            </div>
+
+            <div class="mt-1">
+                <strong>Total Pieces:</strong>
+                <span>
+                    <t t-esc="totalPieces"/>
+                </span>
+            </div>
+
+            <div class="text-danger mt-2" t-if="state.error">
+                <t t-esc="state.error"/>
+            </div>
+
+            <t t-set-slot="footer">
+                <button class="btn btn-secondary" t-on-click="cancel">
+                    Cancel
+                </button>
+                <button class="btn btn-primary" t-on-click="confirm">
+                    Confirm
+                </button>
+            </t>
+
+        </Dialog>
+    </t>
+
+</templates>

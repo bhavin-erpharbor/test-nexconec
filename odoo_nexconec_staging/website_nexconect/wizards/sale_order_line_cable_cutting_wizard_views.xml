@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+
+    <record id="view_sale_order_line_cable_cutting_wizard_form" model="ir.ui.view">
+        <field name="name">sale.order.line.cable.cutting.wizard.form</field>
+        <field name="model">sale.order.line.cable.cutting.wizard</field>
+        <field name="arch" type="xml">
+            <form string="Add Cutting Length">
+                <sheet>
+                    <group>
+                        <field name="sale_order_id" readonly="1"/>
+                        <field name="sale_order_line_id" readonly="1"/>
+                        <field name="product_id" readonly="1"/>
+                    </group>
+
+                    <field name="line_ids">
+                        <list editable="bottom">
+                            <field name="no_of_piece"/>
+                            <field name="no_of_meter"/>
+                            <field name="total" readonly="1"/>
+                        </list>
+                    </field>
+
+                    <group>
+                        <field name="total_pieces" readonly="1"/>
+                        <field name="total_length" readonly="1"/>
+                    </group>
+                </sheet>
+
+                <footer>
+                    <button name="action_confirm"
+                            string="Save Cutting Lines"
+                            type="object"
+                            class="btn-primary"/>
+
+                    <button string="Cancel"
+                            special="cancel"
+                            class="btn-secondary"/>
+                </footer>
+            </form>
+        </field>
+    </record>
+
+</odoo>

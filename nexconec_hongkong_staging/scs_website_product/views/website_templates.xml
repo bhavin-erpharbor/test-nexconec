@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+   <template id="product_stock_info" inherit_id="website_sale.cta_wrapper"
+             active="True" customize_show="True"
+             name="Product Stock Details" priority="42">
+        <xpath expr="//div[@id='o_wsale_cta_wrapper']" position="after">
+            <div class="location_availability_messages o_not_editable"/>
+        </xpath>
+    </template>
+    <template id="product_other_info" inherit_id="website_sale.product_title"
+              active="True" customize_show="True" name="Product other Details"
+              priority="40">
+         <xpath expr="//div[@t-field='product.description_ecommerce']" position="after">
+            <p class="mb4">
+                <b>Internal Reference: </b> <span class="text-muted internal_ref_code"><t t-esc="product_variant.default_code"/></span>
+            </p>
+            <p class="d-none" t-if="product_variant.x_studio_datasheet_link_1">
+                <b>Datasheet: </b> <a class="text-muted" target="_blank" t-att-href="product_variant.x_studio_datasheet_link_1"><img class="img img-responsive" width="10%" src='/website_nexconect/static/src/img/pdf_icon.png'/></a>
+            </p>
+        </xpath>
+    </template>
+</odoo>

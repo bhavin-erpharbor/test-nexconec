@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <record id="nexconec_product_label_layout_form_inherit" model="ir.ui.view">
+        <field name="name">nexconec.product.label.layout.form.inherit</field>
+        <field name="model">product.label.layout</field>
+        <field name="priority">99</field>
+        <field name="inherit_id" ref="product.product_label_layout_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//group[1]/group[2]" position="inside">
+                <field name="product_quantity" invisible="print_format != 'zpl'"/>
+            </xpath>
+        </field>
+    </record>
+
+</odoo>

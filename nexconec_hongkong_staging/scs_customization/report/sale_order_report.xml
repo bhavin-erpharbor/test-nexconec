@@ -1,0 +1,301 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<odoo>
+    <template id="nexconce_so_report_saleorder_document">
+        <t t-call="web.basic_layout">
+            <t t-set="company" t-value="o.company_id"/>
+            <t t-set="o" t-value="o.with_context(lang=o.partner_id.lang)"/>
+            <t t-set="from_sale" t-value="1"/>
+            <t t-call="scs_customization.scs_customization_basic_layout"/>
+            <div class="page">
+                <style>
+                    .total-table td:first-child{
+                        font-size:16px;
+                        font-weight:bold;
+                    }
+                    .total-table td:last-child{
+                        text-align:right;
+                        padding-right:4px;
+                    }
+                    .vlm{
+                        vertical-align:middle;
+                    }
+                </style>
+                <div class="row mb32">
+                    <div t-if="env.context.get('proforma', False) or is_pro_forma" class="text-center" style="font-weight:bold;font-size:15px; margin-top: 30px;">Pro-Forma Invoice</div>
+                    <div t-elif="o.state in ['draft','sent']" class="text-center" style="font-weight:bold;font-size:15px; margin-top: 30px;">Quotation</div>
+                    <div t-else="" class="text-center" style="font-weight:bold;font-size:15px; margin-top: 30px;">Sale Order</div>
+                </div>
+                <div class="row" style="font-size:10px;font-weight:bold;">
+                  <div class="col-3 p-1" style="background-color:#D9D9D9;">
+                    <t t-if="env.context.get('proforma', False) or is_pro_forma">
+                        INVOICE TO
+                    </t>
+                    <t t-else="">
+                        CUSTOMER
+                    </t>
+                  </div>
+                  <div class="col-1"/>
+                  <div class="col-3 p-1" style="background-color:#D9D9D9;">
+                        SHIP TO
+                    </div>
+                  <div class="col-1"/>
+                  <div class="col-4 p-1" style="background-color:#D9D9D9;">
+                        COMMERCIAL DETAILS
+                    </div>
+                </div>
+                <div class="row" style="font-size:10px;">
+                  <div class="col-3 mt-1">
+                    <!-- <div t-field="o.x_attnpo_jzh"/> -->
+                    <div class="mt-2" t-field="o.partner_id.name"/>
+                    <span/>
+                    <div class="mt-2" t-field="o.partner_id.parent_id.name"/>
+                    <div class="mt-2" t-field="o.partner_id.street"/>
+                    <div class="mt-2" t-field="o.partner_id.street2"/>
+                    <div class="mt-1">
+                      <span t-field="o.partner_id.city"/>
+                      <t t-if="o.partner_id.state_id">,</t>
+                      <span t-field="o.partner_id.state_id"/>
+                      <t t-if="o.partner_id.country_id">,</t>
+                      <span t-field="o.partner_id.country_id"/>
+                    </div>
+                    <div t-if="o.partner_id.zip">
+                      <span>ZIP CODE</span>
+                      <span t-field="o.partner_id.zip"/>
+                    </div>
+                    <div class="mt-1" t-if="o.partner_id.vat">
+                      <span>Tax:</span>
+                      <span t-field="o.partner_id.vat"/>
+                    </div>
+                    <div class="mt-2" t-field="o.partner_id.email"/>
+                    <div class="mt-2" t-field="o.partner_id.phone"/>
+                  </div>
+                  <div class="col-1"/>
+                  <div class="col-3 mt-1" t-if="o.partner_shipping_id">
+                    <div class="mt-2" t-field="o.partner_shipping_id.name"/>
+                    <div class="mt-2" t-field="o.partner_shipping_id.parent_id.name"/>
+                    <div class="mt-2" t-field="o.partner_shipping_id.street"/>
+                    <div class="mt-2" t-field="o.partner_shipping_id.street2"/>
+                    <div class="mt-1">
+                      <span t-field="o.partner_shipping_id.city"/>
+                      <t t-if="o.partner_shipping_id.state_id">,</t>
+                      <span t-field="o.partner_shipping_id.state_id"/>
+                      <t t-if="o.partner_shipping_id.country_id">,</t>
+                      <span t-field="o.partner_shipping_id.country_id"/>
+                    </div>
+                    <div t-if="o.partner_shipping_id.zip">
+                      <span>ZIP CODE</span>
+                      <span t-field="o.partner_shipping_id.zip"/>
+                    </div>
+                    <div class="mt-2" t-field="o.partner_shipping_id.email"/>
+                    <div class="mt-2" t-field="o.partner_shipping_id.phone"/>
+                  </div>
+                  <div class="col-3 mt-1" t-if="not o.partner_shipping_id">
+                    <div class="mt-2" t-field="o.company_id.partner_id.name"/>
+                    <div class="mt-2" t-field="o.company_id.partner_id.parent_id.name"/>
+                    <div class="mt-2" t-field="o.company_id.partner_id.street"/>
+                    <div class="mt-2" t-field="o.company_id.partner_id.street2"/>
+                    <div>
+                      <span t-field="o.company_id.partner_id.city"/>
+                      <t t-if="o.company_id.partner_id.state_id">,</t>
+                      <span t-field="o.company_id.partner_id.state_id"/>
+                      <t t-if="o.company_id.partner_id.country_id">,</t>
+                      <span t-field="o.company_id.partner_id.country_id"/>
+                    </div>
+                    <div t-if="o.company_id.partner_id.zip">
+                      <span>ZIP CODE</span>
+                      <span t-field="o.company_id.partner_id.zip"/>
+                    </div>
+                    <div class="mt-2" t-field="o.company_id.partner_id.email"/>
+                    <div class="mt-2" t-field="o.company_id.partner_id.phone"/>
+                  </div>
+                  <div class="col-1"/>
+                  <div class="col-4">
+                    <div style="width: 100%;">
+                      <div class="mt-1" style="width: 50%; float: left;">DATE</div>
+                      <div style="float: left;">
+                          <span t-field="o.date_order" t-options="{'format':'dd/MM/yyyy'}"/>
+                      </div>
+                      <div style="clear: both;"></div>
+                    </div>
+
+                    <div style="width: 100%; font-size:10px;">
+                      <div class="mt-1" style="width: 50%; float: left;">ORDER NO</div>
+                      <div style="float: left;">
+                        <span t-if="o.name" t-field="o.name"/>
+                      </div>
+                      <div style="clear: both;"></div>
+                    </div>
+
+                    <div style="width: 100%;">
+                      <div class="mt-1" style="width: 50%; float: left;">CUSTOMER PO NO</div>
+                      <div style="overflow: hidden;">
+                        <div style="float: left;">
+                            <span t-if="o.client_order_ref" t-field="o.client_order_ref"/>
+                        </div>
+                      </div>
+                      <div style="clear: both;"></div>
+                    </div>
+
+                    <div style="width: 100%;">
+                      <div class="mt-1" style="width: 50%; float: left;">INCOTERMS</div>
+                      <div style="float: left;">
+                        <span t-field="o.incoterm"/>
+                      </div>
+                      <div style="clear: both;"></div>
+                    </div>
+
+                    <div style="width: 100%;">
+                      <div class="mt-1" style="width: 50%; float: left;">SHIPPING METHOD</div>
+                      <div style="float: left;">
+                        <span t-field="o.x_delivery"/>
+                      </div>
+                      <div style="clear: both;"></div>
+                    </div>
+
+                    <div style="width: 100%;">
+                      <div class="mt-1" style="width: 50%; float: left;">PAYMENT TERMS</div>
+                      <div style="float: left;">
+                        <span t-field="o.payment_term_id"/>
+                      </div>
+                      <div style="clear: both;"></div>
+                    </div>
+
+                    <div t-if="env.context.get('proforma', False) or is_pro_forma" style="width: 100%;">
+                      <div  class="mt-1" style="width: 50%; float: left;">SALESPERSON</div>
+                      <div style="float: left;">
+                        <span t-field="o.user_id"/>
+                      </div>
+                      <div style="clear: both;"></div>
+                    </div>
+                    <div t-if="not (env.context.get('proforma', False) or is_pro_forma)" style="width: 100%;">
+                      <div class="mt-1" style="width: 50%; float: left;">BUYER ID</div>
+                      <div style="float: left;">
+                        <span t-field="o.x_user_code"/>
+                      </div>
+                      <div style="clear: both;"></div>
+                    </div>
+                  </div>
+                </div>
+                <!-- <t t-set="s" t-value="(len(o.order_line)/12.0)"/> -->
+                <!-- <t t-set="main_lines" t-value="s if int(s) == s else int(s)+1"/> -->
+                <!-- <t t-set="line_no" t-value="1"/> -->
+                <!-- <t t-foreach="main_lines" t-as="l"> -->
+                <!-- <t t-set="total_per_page" t-value="0.0"/> -->
+                <!-- <t t-set="l" t-value="l+1"/> -->
+                <div class="row mt8">
+                  <div class="col-12" style="font-size:10px;">
+                    <!-- <t t-set="total_discount" t-value="0"/> -->
+                    <table class="table table-borderless mt8" width="100%" style="font-size:10px;">
+                      <thead>
+                          <tr style="font-size:10px;background-color:#D9D9D9;height:25px;margin-top:10px;">
+                              <th class="vlm" style="padding-left:3px;">
+                                  <strong>LINE NO</strong>
+                              </th>
+                              <th class="vlm text-center">
+                                  <strong>PART NUMBER</strong>
+                              </th>
+                              <th width="51%" class="vlm text-center">
+                                  <strong>DESCRIPTION</strong>
+                              </th>
+                              <th class="vlm">
+                                  <strong>UOM</strong>
+                              </th>
+                              <th class="text-right vlm">
+                                  <strong>QTY</strong>
+                              </th>
+                              <th class="text-right vlm">
+                                  <strong>UNIT PRICE</strong>
+                              </th>
+                              <th class="text-right vlm" style="padding-right:3px;">
+                                  <strong>SUB TOTAL</strong>
+                              </th>
+                          </tr>
+                      </thead>
+                      <tbody>
+                        <t t-foreach="o.order_line" t-as="line">
+                            <t t-set="partner_hs_line"
+                                t-value="line.product_id.hs_code_line_ids.filtered(lambda l: l.partner_id.id == o.partner_id.id)[:1]"/>
+                          <t t-if="line.product_id.default_code">
+                            <t t-set="str_name" t-value="'['+line.product_id.default_code+'] '+line.product_id.name"/>
+                          </t>
+                          <t t-if="not line.product_id.default_code">
+                            <t t-set="str_name" t-value="line.product_id.name"/>
+                          </t>
+                          <tr>
+                            <td style="padding-left:3px;text-align:center;">
+                              <span t-esc="line_index + 1"/>
+                            </td>
+                            <!-- <t t-set="line_no" t-value="line_no + 1"/> -->
+                            <td>
+                              <span t-field="line.product_id"/>
+                            </td>
+                            <!-- <td><span t-esc="line.name.replace(str_name,'')"/></td> -->
+                            <t t-if="str_name != line.name">
+                              <t t-if="line.product_id.x_draw_no">
+                                <td>
+                                  <span t-esc="line.name.replace(str_name,'') + ' ' + line.product_id.x_draw_no "/>
+                                  <br/>
+                                  <span t-if="partner_hs_line">HS Code: <span t-esc="partner_hs_line.hs_code"/></span>
+                                </td>
+                              </t>
+                              <t t-if="not line.product_id.x_draw_no">
+                                <td>
+                                  <span t-esc="line.name.replace(str_name,'')"/>
+                                  <br/>
+                                  <span t-if="partner_hs_line and o.x_studio_hs_code_needed">HS Code: <span t-esc="partner_hs_line.hs_code"/></span>
+                                </td>
+                              </t>
+                            </t>
+                            <t t-else="">
+                              <td>
+                                <span t-field="line.name"/>
+                                <br/>
+                                <span t-if="partner_hs_line and o.x_studio_hs_code_needed">HS Code: <span t-esc="partner_hs_line.hs_code"/></span>
+                              </td>
+                            </t>
+                            <td>
+                              <span t-field="line.product_uom_id"/>
+                            </td>
+                            <td class="text-right">
+                              <span t-esc="'%.3f'%line.product_uom_qty"/>
+                            </td>
+                            <td class="text-right">
+                              <span t-field="line.price_unit"/>
+                            </td>
+                            <td class="text-right" style="padding-right:3px;">
+                              <span t-field="line.price_subtotal"/>
+                            </td>
+                            <!-- <t t-set="total_per_page" t-value="total_per_page + line.price_subtotal"/> -->
+                            <!-- <t t-set="total_discount" t-value="line.price_subtotal - (line.product_qty * line.price_unit)"/> -->
+                          </tr>
+                          <tr>
+                            <td colspan="7">&amp;nbsp;</td>
+                          </tr>
+                        </t>
+                      </tbody>
+                    </table>
+                  </div>
+                </div>
+            <!-- </t> -->
+          </div>
+
+        </t>
+    </template>
+    <template id="report_saleorder_nexconce_so">
+        <t t-call="web.html_container">
+            <t t-foreach="docs" t-as="o">
+                <t t-call="scs_customization.nexconce_so_report_saleorder_document" t-lang="o.partner_id.lang"/>
+            </t>
+        </t>
+    </template>
+
+    <template id="report_saleorder_nexconce_so_pro_forma">
+        <t t-call="web.html_container">
+            <t t-set="is_pro_forma" t-value="True"/>
+            <t t-set="docs" t-value="docs.with_context(proforma=True)"/>
+            <t t-foreach="docs" t-as="o">
+                <t t-call="scs_customization.nexconce_so_report_saleorder_document" t-lang="o.partner_id.lang"/>
+            </t>
+        </t>
+    </template>
+</odoo>

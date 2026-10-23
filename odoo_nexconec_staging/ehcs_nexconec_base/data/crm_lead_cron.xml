@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+
+    <record id="nexconec_lead_weekly_reset_cron" model="ir.cron">
+        <field name="name">Nexconec Weekly Lead Reset</field>
+        <field name="model_id" ref="crm.model_crm_lead"/>
+        <field name="state">code</field>
+        <field name="code">model.action_reset_weekly_lead()</field>
+        <field name="interval_number">1</field>
+        <field name="interval_type">weeks</field>
+    </record>
+
+</odoo>

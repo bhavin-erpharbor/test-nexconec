@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<templates xml:space="preserve">
+    <t t-name="dialog" t-inherit="sale.ProductConfiguratorDialog"
+       t-inherit-mode="extension" owl="1">
+       <xpath expr='//ProductList' position="attributes">
+            <attribute name="hidePrice">props.hidePrice</attribute>
+       </xpath>
+       <xpath expr='//h6[@name="sale_product_configurator_list_total"]' position="attributes">
+            <attribute name="t-if">!props.hidePrice</attribute>
+       </xpath>
+    </t>
+<!--    <t t-name="productList" t-inherit="sale_product_configurator.saleProductConfigurator.productList"-->
+<!--       t-inherit-mode="extension" owl="1">-->
+<!--       <xpath expr='//tr[@t-if="!this.props.areProductsOptional"]' position="attributes">-->
+<!--            <attribute name="t-if">!this.props.areProductsOptional and ! this.props.hidePrice</attribute>-->
+<!--       </xpath>-->
+<!--       <xpath expr='//thead/tr/th[3]' position="attributes">-->
+<!--            <attribute name="t-if">! this.props.hidePrice</attribute>-->
+<!--       </xpath>-->
+<!--       <xpath expr='//Product' position="attributes">-->
+<!--            <attribute name="hidePrice">this.props.hidePrice</attribute>-->
+<!--       </xpath>-->
+<!--    </t>-->
+    <t t-inherit="sale.product_price" t-inherit-mode="extension">
+        <xpath expr='//span[@t-out="getFormattedPrice()"]' position="attributes">
+            <attribute name="t-if">! this.props.hidePrice</attribute>
+       </xpath>
+    </t>
+    <t t-name="product" t-inherit="sale.Product"
+       t-inherit-mode="extension" owl="1">
+<!--       <xpath expr='//span[@t-out="getFormattedPrice()"]' position="attributes">-->
+<!--            <attribute name="t-if">! this.props.hidePrice</attribute>-->
+<!--       </xpath>-->
+       <xpath expr='//td[hasclass("o_sale_product_configurator_price")]' position="attributes">
+            <attribute name="t-if">! this.props.hidePrice</attribute>
+       </xpath>
+    </t>
+</templates>

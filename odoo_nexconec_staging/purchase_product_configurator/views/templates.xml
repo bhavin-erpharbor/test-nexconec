@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+
+    <template id="assets_backend_inherit_purchase" inherit_id="web.assets_backend" 
+              name="Purchase Configurator assets">
+        <xpath expr="script[last()]" position="after">
+            <script type="text/javascript" 
+                    src="/purchase_product_configurator/static/src/js/purchase_product_configurator.js"/>
+        </xpath>
+    </template>
+
+</odoo>

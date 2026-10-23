@@ -1,0 +1,6 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_sale_digest_manager,sale.digest manager,model_sale_digest,sales_team.group_sale_manager,1,1,1,1
+access_sale_digest_user,sale.digest user,model_sale_digest,sales_team.group_sale_salesman,1,0,0,0
+access_activity_report_config_manager,activity.report.config manager,model_sale_activity_report_config,sales_team.group_sale_manager,1,1,1,1
+access_activity_report_manager,activity.report manager,model_sale_activity_report,sales_team.group_sale_manager,1,1,1,1
+access_activity_report_user,activity.report user,model_sale_activity_report,sales_team.group_sale_salesman,1,0,0,0

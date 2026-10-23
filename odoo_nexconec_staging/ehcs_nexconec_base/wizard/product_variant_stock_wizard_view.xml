@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+
+    <record id="product_variant_wizard_form_view" model="ir.ui.view">
+        <field name="name">product.variant.wizard.form.view</field>
+        <field name="model">product.variant.wizard</field>
+        <field name="arch" type="xml">
+            <form string="product_variant_wizard">
+                <group>
+                    <field name="pricelist_id"/>
+                    <field name="action" widget="radio" options="{'horizontal': true}" />
+                    <field name="mail_partner_ids" placeholder="Add CC contacts to notify..."
+                           context="{'force_email':True, 'show_email':True}" required="action == 'send_email'"
+                           invisible="action != 'send_email'" widget="many2many_tags" domain="[('email', '!=', False)]"/>
+                </group>
+                <footer>
+                    <button name="action_generate_report" string="Print" type="object" class="btn-primary"
+                            invisible="action != 'print'"/>
+                    <button name="action_send_mail" string="Send" type="object" class="btn-primary"
+                            invisible="action != 'send_email'"/>
+                </footer>
+            </form>
+        </field>
+    </record>
+
+    <record id="action_product_variant_wizard" model="ir.actions.act_window">
+        <field name="name">Generate Excel</field>
+        <field name="res_model">product.variant.wizard</field>
+        <field name="view_mode">form</field>
+        <field name="target">new</field>
+        <field name="view_id" ref="ehcs_nexconec_base.product_variant_wizard_form_view"/>
+    </record>
+
+    <menuitem id="excel_menu"
+              name="Generate Excel"
+              parent="stock.menu_stock_inventory_control"
+              action="action_product_variant_wizard"
+              sequence="102"/>
+
+</odoo>

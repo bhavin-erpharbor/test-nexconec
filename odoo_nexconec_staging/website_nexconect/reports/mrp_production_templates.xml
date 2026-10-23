@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<odoo>
+    <template id="report_mrp_production_compo_nexconect"  inherit_id="mrp.report_mrp_production_components">
+        <xpath expr="//table/thead/tr/th[1]" position="after">
+            <th>Unit Qty</th>
+        </xpath>
+        <xpath expr="//table/tbody/tr/td[1]" position="after">
+            <td>
+                <!-- Get Unit Qty from BOM line -->
+                <div>
+                    <span t-esc="'%.0f'% raw_line.bom_line_id.product_qty">2</span> <!-- Display unit quantity from BOM line -->
+                    <span t-esc="raw_line.bom_line_id.product_uom_id.name" groups="uom.group_uom">Pieces</span>
+                </div>
+            </td>
+        </xpath>
+    </template>
+</odoo>

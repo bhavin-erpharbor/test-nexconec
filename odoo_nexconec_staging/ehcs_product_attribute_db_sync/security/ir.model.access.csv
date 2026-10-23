@@ -1,0 +1,2 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_ehcs_product_attribute_db_sync,access_ehcs_product_attribute_db_sync,model_access_ehcs_product_attribute_db_sync,,1,1,1,1

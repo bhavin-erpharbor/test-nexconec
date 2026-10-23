@@ -1,0 +1,140 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <!-- ═══ CONFIG : form ═══ -->
+    <record id="view_activity_report_config_form" model="ir.ui.view">
+        <field name="name">sale.activity.report.config.form</field>
+        <field name="model">sale.activity.report.config</field>
+        <field name="arch" type="xml">
+            <form string="Configuration Rapport Activités">
+                <sheet>
+                    <div class="oe_title">
+                        <h1><field name="name" readonly="1"/></h1>
+                    </div>
+                    <group>
+                        <group string="Commercial à surveiller">
+                            <field name="watched_user_id"/>
+                            <field name="active"/>
+                        </group>
+                        <group string="Destinataires du rapport">
+                            <field name="recipient_ids" widget="many2many_tags"
+                                   placeholder="Sélectionner les utilisateurs qui recevront ce rapport…"/>
+                        </group>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <!-- ═══ CONFIG : list ═══ -->
+    <record id="view_activity_report_config_list" model="ir.ui.view">
+        <field name="name">sale.activity.report.config.list</field>
+        <field name="model">sale.activity.report.config</field>
+        <field name="arch" type="xml">
+            <list string="Configurations Rapports Activités">
+                <field name="watched_user_id"/>
+                <field name="recipient_ids" widget="many2many_tags"/>
+                <field name="active" widget="boolean_toggle"/>
+            </list>
+        </field>
+    </record>
+
+    <!-- ═══ CONFIG : action (sans groups_id — supprimé en Odoo 19) ═══ -->
+    <record id="action_activity_report_config" model="ir.actions.act_window">
+        <field name="name">Rapports d'activités — Configuration</field>
+        <field name="res_model">sale.activity.report.config</field>
+        <field name="view_mode">list,form</field>
+    </record>
+
+    <!-- ═══ RAPPORT : form ═══ -->
+    <record id="view_activity_report_form" model="ir.ui.view">
+        <field name="name">sale.activity.report.form</field>
+        <field name="model">sale.activity.report</field>
+        <field name="arch" type="xml">
+            <form string="Rapport Activités Hebdomadaire">
+                <header>
+                    <button name="action_send_reports"
+                            string="🚀 Envoyer les rapports"
+                            type="object"
+                            class="oe_highlight"
+                            invisible="state == 'sent'"
+                            groups="sales_team.group_sale_manager"/>
+                    <field name="state" widget="statusbar" statusbar_visible="draft,sent"/>
+                </header>
+                <sheet>
+                    <div class="oe_title">
+                        <h1><field name="name" readonly="1"/></h1>
+                    </div>
+                    <group>
+                        <group string="Période">
+                            <field name="date_start"/>
+                            <field name="date_end"/>
+                        </group>
+                        <group string="Résultats">
+                            <field name="sent_count" readonly="1"/>
+                            <field name="state" readonly="1"/>
+                        </group>
+                    </group>
+                    <group string="Configurations ciblées">
+                        <field name="config_ids" widget="many2many_tags"
+                               placeholder="Laisser vide = toutes les configurations actives"/>
+                    </group>
+                    <notebook>
+                        <page string="Journal d'erreurs" invisible="not error_log">
+                            <field name="error_log" readonly="1"/>
+                        </page>
+                    </notebook>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <!-- ═══ RAPPORT : list ═══ -->
+    <record id="view_activity_report_list" model="ir.ui.view">
+        <field name="name">sale.activity.report.list</field>
+        <field name="model">sale.activity.report</field>
+        <field name="arch" type="xml">
+            <list string="Rapports Activités"
+                  decoration-success="state == 'sent'"
+                  decoration-danger="state == 'error'">
+                <field name="name"/>
+                <field name="date_start"/>
+                <field name="date_end"/>
+                <field name="sent_count"/>
+                <field name="state" widget="badge"
+                       decoration-success="state == 'sent'"
+                       decoration-warning="state == 'draft'"
+                       decoration-danger="state == 'error'"/>
+            </list>
+        </field>
+    </record>
+
+    <!-- ═══ RAPPORT : action ═══ -->
+    <record id="action_activity_report" model="ir.actions.act_window">
+        <field name="name">Rapports d'activités</field>
+        <field name="res_model">sale.activity.report</field>
+        <field name="view_mode">list,form</field>
+    </record>
+
+    <!-- ═══ MENUS — restriction via groups sur le menuitem ═══ -->
+    <menuitem id="menu_activity_report_root"
+              name="Rapports d'activités"
+              parent="sale.sale_menu_root"
+              sequence="100"
+              groups="sales_team.group_sale_manager"/>
+
+    <menuitem id="menu_activity_report_config"
+              name="⚙️ Configurations"
+              parent="menu_activity_report_root"
+              action="action_activity_report_config"
+              sequence="10"
+              groups="sales_team.group_sale_manager"/>
+
+    <menuitem id="menu_activity_report_history"
+              name="📋 Historique des envois"
+              parent="menu_activity_report_root"
+              action="action_activity_report"
+              sequence="20"
+              groups="sales_team.group_sale_manager"/>
+
+</odoo>

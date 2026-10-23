@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <record id="res_partner_form_view_inherit" model="ir.ui.view">
+        <field name="name">res.partner.form</field>
+        <field name="model">res.partner</field>
+        <field name="inherit_id" ref="base.view_partner_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//page[@name='internal_notes']" position="after">
+                <page string="Visit Reports">
+                    <field name="visit_entry_ids" invisible="company_type != 'company'" context="{'form_view_ref': 'ehcs_nexconec_base.visit_entry_form_view'}">
+                        <list>
+                            <field name="date"/>
+                            <field name="opportunities"/>
+                            <field name="challenges"/>
+                            <field name="actions"/>
+                        </list>
+                    </field>
+                    <field name="contact_visit_entry_ids" invisible="company_type != 'person'" context="{'form_view_ref': 'ehcs_nexconec_base.visit_entry_form_view'}">
+                        <list>
+                            <field name="date"/>
+                            <field name="opportunities"/>
+                            <field name="challenges"/>
+                            <field name="actions"/>
+                        </list>
+                    </field>
+                </page>
+            </xpath>
+            <xpath expr="//field[@name='child_ids']/form/sheet/group[2]" position="inside">
+                <field name="is_default_delivery_address" invisible="type != 'delivery'"/>
+            </xpath>
+        </field>
+    </record>
+
+</odoo>

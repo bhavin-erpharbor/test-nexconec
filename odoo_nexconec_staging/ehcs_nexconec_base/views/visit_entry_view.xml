@@ -1,0 +1,98 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<odoo>
+    <record id="visit_entry_tree_view" model="ir.ui.view">
+        <field name="name">visit.entry.tree</field>
+        <field name="model">nexconec.visit.entry</field>
+        <field name="arch" type="xml">
+            <list>
+                <field name="date"/>
+                <field name="opportunities"/>
+                <field name="challenges"/>
+                <field name="actions"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="visit_entry_form_view" model="ir.ui.view">
+        <field name="name">visit.entry.form</field>
+        <field name="model">nexconec.visit.entry</field>
+        <field name="arch" type="xml">
+            <form>
+                <sheet>
+                    <group>
+                        <group>
+                            <field name="date"/>
+                            <field name="contact_id"/>
+                        </group>
+                    </group>
+                    <group col="2">
+                        <group>
+                            <field name="notes"/>
+                        </group>
+                        <group col="2">
+                            <field name="challenges"/>
+                        </group>
+                    </group>
+                    <group>
+                        <group>
+                            <field name="opportunities"/>
+                        </group>
+                        <group>
+                            <field name="challenges"/>
+                        </group>
+                        <group>
+                            <field name="actions"/>
+                        </group>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="visit_entry_search_view" model="ir.ui.view">
+        <field name="name">visit.entry.search.view</field>
+        <field name="model">nexconec.visit.entry</field>
+        <field name="arch" type="xml">
+            <search string="Search Visit Entry">
+                <field name="create_uid" string="Salesperson"/>
+                <field name="contact_id"/>
+                <field name="x_studio_meetings_contact"/>
+                <field name="opportunities" string="Meeting Summary"/>
+                <field name="actions"/>
+                <filter string="Create Date" name="filter_create_date" date="create_date"/>
+                <separator/>
+                <filter string="Date" name="filter_date" date="date"/>
+                <filter string="Date" name="Date" domain="[]" context="{'group_by': 'date'}"/>
+                <filter string="Salesperson" name="salesperson" domain="[]" context="{'group_by': 'create_uid'}"/>
+                <filter string="Company" name="company" domain="[]" context="{'group_by': 'contact_id'}"/>
+                <filter string="Meeting's Contact" name="meeting_contact" domain="[]" context="{'group_by': 'x_studio_meetings_contact'}"/>
+                <filter string="Country" name="country" domain="[]" context="{'group_by': 'x_studio_related_field_6sm_1iqfuqgt9'}"/>
+            </search>
+        </field>
+    </record>
+
+    <record id="visit_entry_calendar_view" model="ir.ui.view">
+        <field name="name">visit.entry.calendar</field>
+        <field name="model">nexconec.visit.entry</field>
+        <field name="arch" type="xml">
+            <calendar string="Visit Reports"
+                      date_start="date"
+                      color="create_uid">
+                <field name="contact_id"/>
+                <field name="create_uid" string="Salesperson" filters="1" invisible="1"/>
+            </calendar>
+        </field>
+    </record>
+
+    <record id="action_visit_entry" model="ir.actions.act_window">
+        <field name="name">Visit Entry</field>
+        <field name="res_model">nexconec.visit.entry</field>
+        <field name="view_mode">calendar,list,form</field>
+        <field name="search_view_id" ref="visit_entry_search_view"/>
+    </record>
+
+    <menuitem id="menu_visit_report"
+        name="Visit Report"
+        parent="crm.crm_menu_root"
+        action="ehcs_nexconec_base.action_visit_entry"/>
+</odoo>

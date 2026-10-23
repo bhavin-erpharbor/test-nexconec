@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+
+    <record id="purchase_order_form_matrix_inherit" model="ir.ui.view">
+        <field name="name">purchase.order.form.inherit.matrix</field>
+        <field name="model">purchase.order</field>
+        <field name="inherit_id" ref="purchase_product_matrix.purchase_order_form_matrix"/>
+        <field name="arch" type="xml">
+            <xpath expr="//list/field[@name='product_template_id']" position="attributes">
+                <attribute name="purchase_product_configurator">1</attribute>
+                <attribute name="readonly">state in ('done', 'cancel')</attribute>
+                <attribute name="required">not display_type</attribute>
+                <attribute name="options">{'no_create': True, 'no_edit': True, 'no_open': False}</attribute>
+            </xpath>
+            <xpath expr="//list/field[@name='product_template_id']" position="after">
+            <field name="product_template_attribute_value_ids" column_invisible="1" />
+                <field name="product_custom_attribute_value_ids" column_invisible="1" >
+                    <list>
+                        <field name="custom_product_template_attribute_value_id" />
+                        <field name="custom_value" />
+                    </list>
+                </field>
+                <field name="product_no_variant_attribute_value_ids" column_invisible="1" />
+                <field name="product_add_mode" column_invisible="1" />
+            </xpath>
+        </field>
+    </record>
+
+</odoo>

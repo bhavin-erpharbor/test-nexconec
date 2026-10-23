@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Portal user see own quotations -->
+    <!-- Update sale 'sale_order_rule_portal' rule -->
+    <function name="write" model="ir.model.data">
+       <function name="search" model="ir.model.data">
+           <value eval="[('module', '=', 'sale'), ('name', '=', 'sale_order_rule_portal')]"/>
+       </function>
+       <value eval="{'noupdate': False}"/>
+    </function>
+    <record id="sale.sale_order_rule_portal" model="ir.rule">
+        <field name="name">Portal Personal Quotations/Sales Orders</field>
+        <field ref="sale.model_sale_order" name="model_id"/>
+        <field name="domain_force">['|',  ('message_partner_ids','child_of',[user.commercial_partner_id.id]), ('partner_id', '=', user.partner_id.id)]</field>
+        <field name="groups" eval="[(4, ref('base.group_portal'))]"/>
+    </record>
+
+</odoo>

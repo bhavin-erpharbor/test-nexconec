@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<odoo>
+
+    <!-- Access rule for Sales Manager -->
+    <record id="nexconec_visit_entry_rule_sales_manager_all" model="ir.rule">
+        <field name="name">Nexconec Visit Entry: All records for Sales Manager</field>
+        <field name="model_id" ref="scs_customization.model_nexconec_visit_entry"/>
+        <field name="domain_force">[(1, '=', 1)]</field>
+    </record>
+
+    <!-- Access rule for others -->
+<!--    <record id="nexconec_visit_entry_rule_own_records" model="ir.rule">-->
+<!--        <field name="name">Nexconec Visit Entry: Own records only</field>-->
+<!--        <field name="model_id" ref="scs_customization.model_nexconec_visit_entry"/>-->
+<!--        <field name="domain_force">[('create_uid', '=', user.id)]</field>-->
+<!--        <field name="groups" eval="[(4, ref('base.group_user'))]"/>-->
+<!--    </record>-->
+
+</odoo>

@@ -1,0 +1,3 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_hs_code_line,access_hs_code_line,model_hs_code_line,,1,1,1,1
+access_nexconec_visit_entry_admin,access.nexconec.visit.entry.admin,model_nexconec_visit_entry,,1,1,1,1

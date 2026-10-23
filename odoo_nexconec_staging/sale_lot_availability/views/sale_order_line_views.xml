@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Vue 1 : liste standalone sale.order.line (menu Order Lines) -->
+    <record id="view_sale_order_line_lots_tree" model="ir.ui.view">
+        <field name="name">sale.order.line.lots.tree</field>
+        <field name="model">sale.order.line</field>
+        <field name="inherit_id" ref="sale.view_order_line_tree"/>
+        <field name="arch" type="xml">
+            <xpath expr="//list" position="inside">
+                <field name="lot_tooltip" column_invisible="1"/>
+                <field
+                    name="available_lots_count"
+                    string="Lots dispo."
+                    widget="lot_availability"
+                    readonly="1"
+                    optional="show"
+                />
+            </xpath>
+        </field>
+    </record>
+
+    <!-- Vue 2 : formulaire sale.order → liste inline order_line -->
+    <record id="view_sale_order_form_lots_inherit" model="ir.ui.view">
+        <field name="name">sale.order.form.lots.inherit</field>
+        <field name="model">sale.order</field>
+        <field name="inherit_id" ref="sale.view_order_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='order_line']/list" position="inside">
+                <field name="lot_tooltip" column_invisible="1"/>
+                <field
+                    name="available_lots_count"
+                    string="Lots dispo."
+                    widget="lot_availability"
+                    readonly="1"
+                    optional="show"
+                />
+            </xpath>
+        </field>
+    </record>
+</odoo>

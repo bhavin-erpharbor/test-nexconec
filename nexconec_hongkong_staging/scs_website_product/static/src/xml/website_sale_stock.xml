@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<templates>
+
+    <t t-name="scs_website_product.product_location_availability">
+        <t t-if="product_type == 'product'">
+            <span class="mb4" t-if="stock_by_location">
+                <hr/>
+                <b>Stock Availability: </b>
+                <table class="table table-bordered">
+                    <thead>
+                        <tr>
+                            <th scope="col">Warehouse</th>
+                            <th scope="col">Quantity</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <t t-foreach="stock_by_location" t-as="stock_qty" t-key="stock_qty_index">
+                           <tr>
+                               <td class="text-muted" t-esc="stock_qty['warehouse']"></td>
+                               <td class="text-muted"><span t-esc="stock_qty['qty']"/> <span t-esc="stock_qty['product_uom']"/></td>
+                           </tr>
+                        </t>
+                    </tbody>
+                </table>
+                <div>
+                    <t t-foreach="stock_by_location" t-as="stock_qty" t-key="stock_qty_index">
+                        <t t-set="transit_qty" t-value="stock_qty['forecasted_qty'] - stock_qty['qty']"/>
+                        Quantity in transit: <span t-esc="transit_qty"/> <span t-esc="stock_qty['product_uom']"/> 
+                        <t t-if="forcasted_date_list and transit_qty > 0">
+                            arriving on <t t-esc="forcasted_date_list"/>
+                        </t><br/>
+                    </t>
+                </div>
+            </span>
+        </t>
+    </t>
+
+</templates>

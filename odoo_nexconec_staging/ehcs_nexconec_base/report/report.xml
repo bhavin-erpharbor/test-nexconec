@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+
+    <record id="report_product_variant_stock_xlsx" model="ir.actions.report">
+        <field name="name">Product Variant Stock XlSX</field>
+        <field name="model">product.product</field>
+        <field name="report_type">xlsx</field>
+        <field name="report_name">ehcs_nexconec_base.report_product_variant_xlsx</field>
+        <field name="report_file">ehcs_nexconec_base.report_product_variant_xlsx</field>
+        <field name="binding_model_id" ref="product.model_product_product"/>
+        <field name="binding_type">report</field>
+    </record>
+
+    <record id="report_po_export_to_vendor_xlsx" model="ir.actions.report">
+        <field name="name">PO Export To Vendor</field>
+        <field name="model">purchase.order</field>
+        <field name="report_type">xlsx</field>
+        <field name="report_name">ehcs_nexconec_base.report_po_export</field>
+        <field name="report_file">ehcs_nexconec_base.report_po_export</field>
+        <field name="binding_type">report</field>
+    </record>
+
+</odoo>

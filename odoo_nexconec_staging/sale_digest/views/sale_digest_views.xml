@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <record id="view_sale_digest_form" model="ir.ui.view">
+        <field name="name">sale.digest.form</field>
+        <field name="model">sale.digest</field>
+        <field name="arch" type="xml">
+            <form string="Digest Commercial">
+                <header>
+                    <button name="action_send_digest"
+                            string="🚀 Envoyer le digest hebdo"
+                            type="object"
+                            class="oe_highlight"
+                            invisible="state == 'sent'"
+                            groups="sales_team.group_sale_manager"/>
+                    <button name="action_send_monthly_report"
+                            string="📋 Envoyer le rapport mensuel"
+                            type="object"
+                            groups="sales_team.group_sale_manager"/>
+                    <field name="state" widget="statusbar" statusbar_visible="draft,sent"/>
+                </header>
+                <sheet>
+                    <div class="oe_title">
+                        <h1><field name="name" readonly="1"/></h1>
+                    </div>
+                    <group>
+                        <group string="Période">
+                            <field name="date_start"/>
+                            <field name="date_end"/>
+                        </group>
+                        <group string="Résultats">
+                            <field name="sent_count" readonly="1"/>
+                            <field name="state" readonly="1"/>
+                        </group>
+                    </group>
+                    <group string="Destinataires">
+                        <field name="user_ids" widget="many2many_tags"
+                               placeholder="Laisser vide = tous les commerciaux actifs avec le digest activé"/>
+                    </group>
+                    <notebook>
+                        <page string="Journal d'erreurs" invisible="not error_log">
+                            <field name="error_log" readonly="1"/>
+                        </page>
+                    </notebook>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="view_sale_digest_list" model="ir.ui.view">
+        <field name="name">sale.digest.list</field>
+        <field name="model">sale.digest</field>
+        <field name="arch" type="xml">
+            <list string="Digests Commerciaux"
+                  decoration-success="state == 'sent'"
+                  decoration-danger="state == 'error'">
+                <field name="name"/>
+                <field name="date_start"/>
+                <field name="date_end"/>
+                <field name="sent_count"/>
+                <field name="state" widget="badge"
+                       decoration-success="state == 'sent'"
+                       decoration-warning="state == 'draft'"
+                       decoration-danger="state == 'error'"/>
+            </list>
+        </field>
+    </record>
+
+    <!-- action sans groups_id (supprimé Odoo 19) — restriction via menuitem -->
+    <record id="action_sale_digest" model="ir.actions.act_window">
+        <field name="name">Digests Commerciaux</field>
+        <field name="res_model">sale.digest</field>
+        <field name="view_mode">list,form</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">Aucun digest envoyé pour l'instant</p>
+            <p>Créez un digest manuellement ou attendez le cron automatique.</p>
+        </field>
+    </record>
+
+    <menuitem id="menu_sale_digest_root"
+              name="Digests Commerciaux"
+              parent="sale.sale_menu_root"
+              sequence="99"
+              groups="sales_team.group_sale_manager"/>
+
+    <menuitem id="menu_sale_digest"
+              name="Historique des digests"
+              parent="menu_sale_digest_root"
+              action="action_sale_digest"
+              sequence="10"
+              groups="sales_team.group_sale_manager"/>
+
+</odoo>

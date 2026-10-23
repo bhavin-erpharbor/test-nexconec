@@ -1,0 +1,88 @@
+<odoo>
+    <record id="product_attribute_view_form_inherit_nexconect" model="ir.ui.view">
+        <field name="name">product.attribute.view.form.inherit</field>
+        <field name="model">product.attribute</field>
+        <field name="inherit_id" ref="product.product_attribute_view_form"/>
+        <field name="arch" type="xml">
+            <field name="create_variant" position="after">
+                <field name="custom_cal"/>
+                <field name="is_custom_attribute"/>
+                <field name="is_connector" invisible="not custom_cal"/>
+                <!-- attrs="{'invisible': [('custom_cal', '=', False)]}" -->
+                <field name="is_fiber_count" invisible="not custom_cal"/>
+                <!-- attrs="{'invisible': [('custom_cal', '=', False)]}" -->
+            </field>
+            <xpath expr="//field[@name='value_ids']/list/field[@name='name']" position="after">
+                <field name="ref_code"/>
+                <field name="custom_value"/>
+                <field name="no_varient_price"/>
+            </xpath>
+        </field>
+    </record>
+
+    <record id="product_template_attribute_value_view_form_inherit_nexconect" model="ir.ui.view">
+        <field name="name">product.template.attribute.value.form.inherit</field>
+        <field name="model">product.template.attribute.value</field>
+        <field name="inherit_id" ref="product.product_template_attribute_value_view_form"/>
+        <field name="arch" type="xml">
+            <field name="price_extra" position="after">
+                <field name="ref_code"/>
+                <field name="custom_value"/>
+                <field name="price_extra" />
+            </field>
+        </field>
+    </record>
+
+    <record id="product_public_category_form_view_inherit_nexconect" model="ir.ui.view">
+        <field name="name">product.public.category.form.inherit</field>
+        <field name="model">product.public.category</field>
+        <field name="inherit_id" ref="website_sale.product_public_category_form_view"/>
+        <field name="arch" type="xml">
+            <field name="sequence" position="after">
+                <field name="activate_subcategory_filter_using_customer"/>
+                <field name="partner_ids" domain="[('is_company', '=', True)]"/>
+            </field>
+        </field>
+    </record>
+
+    <record id="product_normal_form_view_inherit_nexconect" model="ir.ui.view">
+        <field name="name">product.product.form.inherit</field>
+        <field name="model">product.product</field>
+        <field name="inherit_id" ref="product.product_normal_form_view"/>
+        <field name="arch" type="xml">
+            <field name="default_code" position="after">
+                <field name="custom_internal_reference_no_sort" invisible="1"/>
+                <field name="product_internal_reference_ids">
+                    <list editable="bottom">
+                        <field name="name"/>
+                    </list>
+                </field>
+            </field>
+        </field>
+    </record>
+    <record id="product_variant_easy_edit_view_inherit_nexconect" model="ir.ui.view">
+        <field name="name">product.product.form.inherit</field>
+        <field name="model">product.product</field>
+        <field name="inherit_id" ref="product.product_variant_easy_edit_view"/>
+        <field name="arch" type="xml">
+            <field name="default_code" position="after">
+                <field name="product_internal_reference_ids">
+                    <list editable="bottom">
+                        <field name="name"/>
+                    </list>
+                </field>
+            </field>
+        </field>
+    </record>
+
+    <record id="product_product_tree_view_inherit_nexconect" model="ir.ui.view">
+        <field name="name">product.product.form.inherit</field>
+        <field name="model">product.product</field>
+        <field name="inherit_id" ref="product.product_product_tree_view"/>
+        <field name="arch" type="xml">
+            <field name="default_code" position="after">
+                <field name="product_internal_reference_ids" widget="many2many_tags"/>
+            </field>
+        </field>
+    </record>
+</odoo>

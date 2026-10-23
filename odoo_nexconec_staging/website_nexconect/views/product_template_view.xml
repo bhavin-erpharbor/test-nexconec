@@ -1,0 +1,26 @@
+<odoo>
+    <record model="ir.ui.view" id="product_template_form_view_inheited_website">
+        <field name="name">product.template.product.website.form.inherited</field>
+        <field name="model">product.template</field>
+        <field name="inherit_id" ref="product.product_template_form_view"/>
+        <field name="arch" type="xml">
+            <field name="website_ribbon_id" position="after">
+                <field name="minimum_qty"/>
+                <field name="allow_cable_cutting"/>
+            </field>
+        </field>
+    </record>
+
+    <record model="ir.ui.view" id="product_pricelist_form_view_inheited">
+        <field name="name">product.pricelist.form.inherited</field>
+        <field name="model">product.pricelist</field>
+        <field name="inherit_id" ref="product.product_pricelist_view"/>
+        <field name="arch" type="xml">
+            <xpath expr="//notebook" position="inside">
+                <page name="related_custo_pricelist" string="Customers">
+                    <field name="company_customer_pricelist_ids"/>
+                </page>
+            </xpath>
+        </field>
+    </record>
+</odoo>

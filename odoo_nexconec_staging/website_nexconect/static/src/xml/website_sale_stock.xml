@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<templates>
+    <t t-name="website_nexconect.product_location_availability">
+<!--        <span class="mb4" t-if="pricelist_available">-->
+<!--            <table class="table table-bordered" style="width:80%;">-->
+<!--                <thead>-->
+<!--                    <tr>-->
+<!--                        <th scope="col">Quantity to Order</th>-->
+<!--                        <th scope="col">Price</th>-->
+<!--                    </tr>-->
+<!--                </thead>-->
+<!--                <tbody>-->
+<!--                    <t t-foreach="pricelist_available" t-as="stock_qty" t-key="stock_qty">-->
+<!--                        <tr>-->
+<!--                            <td class="text-muted" t-esc="stock_qty['min_quantity']"></td>-->
+<!--                            <td class="text-muted">-->
+<!--                                <span t-esc="stock_qty['price']"/>-->
+<!--                            </td>-->
+<!--                        </tr>-->
+<!--                    </t>-->
+<!--                </tbody>-->
+<!--            </table>-->
+<!--            <div>-->
+<!--            </div>-->
+<!--        </span>-->
+
+        <t t-if="product_type == 'consu'">
+            <span class="mb4" t-if="stock_by_location">
+                <b>Stock Availability: </b>
+                <table class="table table-bordered" style="width:80%;">
+                    <thead>
+                        <tr>
+                            <th scope="col">Warehouse</th>
+                            <th scope="col" t-if="allow_cable_cutting">Lots</th>
+                            <th scope="col">Quantity</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <t t-foreach="stock_by_location" t-as="stock_qty" t-key="stock_qty">
+                           <tr>
+                               <td class="text-muted" t-esc="stock_qty['warehouse']"></td>
+                               <td class="text-muted" t-if="allow_cable_cutting"><span t-esc="stock_qty['lot_id']"/></td>
+                               <td class="text-muted"><span t-esc="stock_qty['qty']"/> <span t-esc="stock_qty['product_uom']"/></td>
+                           </tr>
+                        </t>
+                    </tbody>
+                </table>
+               <div>
+<!--                   <t t-foreach="stock_by_location" t-as="stock_qty" t-key="stock_qty">-->
+<!--                        <t t-set="transit_qty" t-value="stock_qty['forecasted_qty'] - stock_qty['qty']"/>-->
+<!--                        Quantity in transit: <span t-esc="transit_qty"/> <span t-esc="stock_qty['product_uom']"/> -->
+<!--                        <t t-if="forcasted_date_list and transit_qty > 0">-->
+<!--                            arriving on <t t-esc="forcasted_date_list"/>-->
+<!--                        </t>-->
+<!--                   </t>-->
+                   <t t-if="quantity_transit">
+                       <strong>
+                           <u>Quantity in Transit:</u>
+                       </strong>
+                       <br/>
+                       <t t-foreach="forecasted_data" t-as="forecast_data" t-key="forecast_data">
+                           <span t-esc="forecast_data['qty']"/>
+                           <span t-esc="forecast_data['uom']"/>
+                           <t t-if="forecast_data['forecasted_date']">
+                               arriving on
+                               <t t-esc="forecast_data['forecasted_date']"/>
+                           </t>
+                           <br/>
+                       </t>
+                   </t>
+                   <t t-if="display_mo_qty">
+                       <span style="color:red;">Manufacturing Available for this product</span>
+                       <br/>
+                       <span t-esc="mo_qty"/> Qty Available
+                   </t>
+                </div>
+            </span>
+        </t>
+    </t>
+</templates>

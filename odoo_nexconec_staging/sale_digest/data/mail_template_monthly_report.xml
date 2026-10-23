@@ -1,0 +1,133 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+  <data noupdate="0">
+    <record id="email_template_monthly_report" model="mail.template">
+      <field name="name">Rapport Commercial Mensuel Consolidé</field>
+      <field name="model_id" ref="base.model_res_users"/>
+      <field name="subject">📋 Rapport commercial mensuel — ${ctx.get('month_label','')}</field>
+      <field name="email_from">${object.company_id.email or user.email}</field>
+      <field name="email_to">${object.email}</field>
+      <field name="lang">fr_FR</field>
+      <field name="auto_delete">False</field>
+      <field name="body_html"><![CDATA[
+<!DOCTYPE html>
+<html lang="fr">
+<head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1.0"></head>
+<body style="margin:0;padding:0;background:#F0F2F5;font-family:'Segoe UI',Arial,sans-serif;color:#1A1F2E;line-height:1.5;">
+<table width="100%" cellpadding="0" cellspacing="0" style="background:#F0F2F5;padding:30px 10px;">
+<tr><td align="center">
+<table width="720" cellpadding="0" cellspacing="0" style="max-width:720px;background:#ffffff;border-radius:8px;overflow:hidden;">
+
+  <!-- HEADER -->
+  <tr>
+    <td style="background:linear-gradient(135deg,#1B4F99,#2E7DF7);padding:36px 40px;color:#fff;">
+      <div style="font-size:13px;font-weight:600;opacity:0.8;text-transform:uppercase;letter-spacing:1px;margin-bottom:8px;">Rapport mensuel consolidé</div>
+      <div style="font-size:26px;font-weight:800;"><t t-esc="(ctx or {}).get('company') and (ctx or {}).get('company').name or object.company_id.name"/></div>
+      <div style="font-size:20px;font-weight:600;margin-top:6px;opacity:0.92;"><t t-esc="(ctx or {}).get('month_label','—')"/></div>
+      <div style="font-size:13px;margin-top:8px;opacity:0.75;">Généré le <t t-esc="(ctx or {}).get('generated_on','—')"/></div>
+    </td>
+  </tr>
+
+  <!-- TOTAUX -->
+  <tr>
+    <td style="background:#F8FBFF;padding:24px 0;border-bottom:1px solid #E5EDF9;">
+      <table width="100%">
+        <tr>
+          <td width="25%" align="center" style="border-right:1px solid #DDE6F5;padding:0 10px;">
+            <div style="font-size:22px;font-weight:800;color:#1B4F99;"><t t-esc="(ctx or {}).get('total_ca','—')"/></div>
+            <div style="font-size:11px;font-weight:600;color:#7B8AAA;text-transform:uppercase;margin-top:4px;">CA total</div>
+          </td>
+          <td width="25%" align="center" style="border-right:1px solid #DDE6F5;padding:0 10px;">
+            <div style="font-size:22px;font-weight:800;color:#2E7DF7;"><t t-esc="(ctx or {}).get('total_invoiced','—')"/></div>
+            <div style="font-size:11px;font-weight:600;color:#7B8AAA;text-transform:uppercase;margin-top:4px;">Total facturé</div>
+          </td>
+          <td width="25%" align="center" style="border-right:1px solid #DDE6F5;padding:0 10px;">
+            <div style="font-size:22px;font-weight:800;color:#1DB868;"><t t-esc="(ctx or {}).get('total_nb_won','—')"/></div>
+            <div style="font-size:11px;font-weight:600;color:#7B8AAA;text-transform:uppercase;margin-top:4px;">Affaires gagnées</div>
+          </td>
+          <td width="25%" align="center" style="padding:0 10px;">
+            <div style="font-size:22px;font-weight:800;color:#9AA3B5;"><t t-esc="(ctx or {}).get('total_nb_opps','—')"/></div>
+            <div style="font-size:11px;font-weight:600;color:#7B8AAA;text-transform:uppercase;margin-top:4px;">Opportunités actives</div>
+          </td>
+        </tr>
+      </table>
+    </td>
+  </tr>
+
+  <!-- TABLEAU PAR COMMERCIAL -->
+  <tr>
+    <td style="padding:32px 40px 40px;">
+      <div style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:1px;color:#9AA3B5;margin-bottom:16px;">👥 Performance par commercial</div>
+      <table width="100%" cellpadding="0" cellspacing="0" style="border-collapse:collapse;">
+        <thead>
+          <tr style="background:#F8FBFF;">
+            <th style="text-align:left;padding:10px 8px;font-size:11px;color:#9AA3B5;border-bottom:2px solid #E5EDF9;">Commercial</th>
+            <th style="text-align:right;padding:10px 8px;font-size:11px;color:#9AA3B5;border-bottom:2px solid #E5EDF9;">Booking</th>
+            <th style="text-align:right;padding:10px 8px;font-size:11px;color:#9AA3B5;border-bottom:2px solid #E5EDF9;">Facturé</th>
+            <th style="text-align:center;padding:10px 8px;font-size:11px;color:#9AA3B5;border-bottom:2px solid #E5EDF9;">Obj. fact.</th>
+            <th style="text-align:center;padding:10px 8px;font-size:11px;color:#9AA3B5;border-bottom:2px solid #E5EDF9;">Opps</th>
+            <th style="text-align:center;padding:10px 8px;font-size:11px;color:#9AA3B5;border-bottom:2px solid #E5EDF9;">W/L</th>
+            <th style="text-align:center;padding:10px 8px;font-size:11px;color:#9AA3B5;border-bottom:2px solid #E5EDF9;">Transfo</th>
+          </tr>
+        </thead>
+        <tbody>
+          <t t-foreach="(ctx or {}).get('rows', [])" t-as="row">
+          <t t-set="row_pct" t-value="row.get('pct_target', 0)"/>
+          <tr>
+            <td style="padding:12px 8px;border-bottom:1px solid #F0F3FA;font-weight:600;"><t t-esc="row.get('name','—')"/></td>
+            <td style="padding:12px 8px;border-bottom:1px solid #F0F3FA;text-align:right;font-weight:700;color:#1B4F99;"><t t-esc="row.get('ca','—')"/></td>
+            <td style="padding:12px 8px;border-bottom:1px solid #F0F3FA;text-align:right;font-weight:700;color:#2E7DF7;"><t t-esc="row.get('invoiced','—')"/></td>
+            <td style="padding:12px 8px;border-bottom:1px solid #F0F3FA;text-align:center;">
+              <div style="font-size:11px;color:#9AA3B5;margin-bottom:3px;"><t t-esc="row_pct"/>%</div>
+              <table width="80" cellpadding="0" cellspacing="0" style="margin:0 auto;background:#EEF1F8;height:6px;border-radius:4px;overflow:hidden;">
+                <tr>
+                  <td t-attf-style="width:{{ row_pct }}%;background:{{ '#1DB868' if row_pct &gt;= 75 else '#F9A825' if row_pct &gt;= 40 else '#E0462B' }};height:6px;"></td>
+                  <td t-attf-style="width:{{ 100 - row_pct }}%;"></td>
+                </tr>
+              </table>
+              <div style="font-size:10px;color:#C0C8D8;margin-top:3px;"><t t-esc="row.get('target_month','—')"/></div>
+            </td>
+            <td style="padding:12px 8px;border-bottom:1px solid #F0F3FA;text-align:center;color:#9AA3B5;"><t t-esc="row.get('nb_opps', 0)"/></td>
+            <td style="padding:12px 8px;border-bottom:1px solid #F0F3FA;text-align:center;">
+              <span style="color:#1DB868;font-weight:700;"><t t-esc="row.get('nb_won', 0)"/>W</span>
+              <span style="color:#9AA3B5;"> / </span>
+              <span style="color:#E0462B;font-weight:700;"><t t-esc="row.get('nb_lost', 0)"/>L</span>
+            </td>
+            <td style="padding:12px 8px;border-bottom:1px solid #F0F3FA;text-align:center;font-weight:700;"><t t-esc="row.get('taux_transfo', 0)"/>%</td>
+          </tr>
+          </t>
+          <t t-if="not (ctx or {}).get('rows')">
+          <tr><td colspan="7" style="text-align:center;padding:40px;color:#9AA3B5;">Aucune donnée disponible.</td></tr>
+          </t>
+        </tbody>
+        <tfoot>
+          <tr style="background:#F8FBFF;">
+            <td style="padding:12px 8px;font-weight:800;border-top:2px solid #E5EDF9;">TOTAL</td>
+            <td style="padding:12px 8px;text-align:right;font-weight:800;color:#1B4F99;border-top:2px solid #E5EDF9;"><t t-esc="(ctx or {}).get('total_ca','—')"/></td>
+            <td style="padding:12px 8px;text-align:right;font-weight:800;color:#2E7DF7;border-top:2px solid #E5EDF9;"><t t-esc="(ctx or {}).get('total_invoiced','—')"/></td>
+            <td style="border-top:2px solid #E5EDF9;"></td>
+            <td style="padding:12px 8px;text-align:center;font-weight:800;border-top:2px solid #E5EDF9;"><t t-esc="(ctx or {}).get('total_nb_opps','—')"/></td>
+            <td style="padding:12px 8px;text-align:center;font-weight:800;color:#1DB868;border-top:2px solid #E5EDF9;"><t t-esc="(ctx or {}).get('total_nb_won','—')"/>W</td>
+            <td style="border-top:2px solid #E5EDF9;"></td>
+          </tr>
+        </tfoot>
+      </table>
+    </td>
+  </tr>
+
+  <!-- FOOTER -->
+  <tr>
+    <td style="background:#F8FBFF;padding:24px 40px;text-align:center;font-size:12px;color:#9AA3B5;border-top:1px solid #E5EDF9;">
+      <t t-esc="object.company_id.name"/> · Rapport commercial mensuel — <t t-esc="(ctx or {}).get('month_label','—')"/>
+    </td>
+  </tr>
+
+</table>
+</td></tr>
+</table>
+</body>
+</html>
+      ]]></field>
+    </record>
+  </data>
+</odoo>

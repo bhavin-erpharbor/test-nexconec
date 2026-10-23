@@ -1,0 +1,105 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<odoo>
+
+    <record id="nexconec_stripe_payment_confirmation_template" model="mail.template">
+        <field name="name">Nexconec Stripe Payment Confirmation</field>
+        <field name="model_id" ref="sale.model_sale_order"/>
+        <field name="subject">Nexconec Payment Confirmation (Ref {{ object.name or 'n/a' }})</field>
+        <field name="active" eval="True"/>
+        <field name="email_from">{{ (object.user_id.email_formatted or user.email_formatted) }}</field>
+        <field name="partner_to">{{ object.partner_id.id }}</field>
+        <field name="lang">{{ object.partner_id.lang }}</field>
+        <field name="body_html" type="html">
+            <div style="font-size:13px;font-family:'Lucida Grande', Helvetica, Verdana, Arial, sans-serif;margin:0px;padding: 0px;">
+                <p style="box-sizing:border-box;margin:0px;font-family:'Lucida Grande', Helvetica, Verdana, Arial, sans-serif;padding:0px;font-size: 12px;">
+                    Hello,
+                    <br/>
+                    <br/>
+                    We’re pleased to inform you that we have successfully received your payment for your order
+                    <strong style="box-sizing:border-box;font-weight:bolder;">
+                        <t t-out="object.name"/>
+                    </strong><br/>
+                    Our team will begin processing your order shortly, and we’ll notify you as soon as it’s underway.
+                    <br/><br/>
+                    Thank you for your prompt payment and for choosing us. We appreciate your patience and look forward to serving you.
+                    <br/><br/>
+                </p>
+
+                <table class="table table-bordered" style="border-left-width:1px;border-bottom-width:1px;border-right-width:1px;border-top-width:1px;border-left-color:#dee2e6;border-bottom-color:#dee2e6;border-right-color:#dee2e6;border-top-color:#dee2e6;box-sizing: border-box; vertical-align: top; color: #374151; caption-side: bottom; border-style: solid; margin: 0px 0px 16px; table-layout: fixed; border-color: #dee2e6; border-width: 1px; width: 100%; border-collapse: collapse; text-align: center; font-size: 13px; font-family: 'Lucida Grande', Helvetica, Verdana, Arial, sans-serif;" width="100%">
+                    <tbody style="border-style:none;box-sizing:border-box;vertical-align:inherit;border-left-width:0px;border-bottom-width:0px;border-right-width:0px;border-top-width:0px;border-left-color:inherit;border-bottom-color:inherit;border-right-color:inherit;border-top-color:inherit;">
+                        <tr style="border-style:solid;box-sizing:border-box;border-left-width:0px;border-bottom-width:1px;border-right-width:0px;border-top-width:1px;border-left-color:inherit;border-bottom-color:inherit;border-right-color:inherit;border-top-color:inherit;">
+                            <td style="border-left-width:1px;border-bottom-width:1px;border-right-width:1px;border-top-width:1px;border-left-color:#dee2e6;border-bottom-color:#dee2e6;border-right-color:#dee2e6;border-top-color:#dee2e6;box-sizing: border-box; box-shadow: #6badde 0px 0px 0px 9999px inset; border-style: solid; padding: 12px; border-color: #dee2e6; border-width: 1px; vertical-align: top; text-align: center; background-color: #6badde;">
+                                <font class="text-black" style="box-sizing:border-box;color:#000000;">
+                                    <b style="box-sizing:border-box;font-weight:bolder;">Order Reference</b>
+                                </font>
+                            </td>
+                            <td style="border-left-width:1px;border-bottom-width:1px;border-right-width:1px;border-top-width:1px;border-left-color:#dee2e6;border-bottom-color:#dee2e6;border-right-color:#dee2e6;border-top-color:#dee2e6;box-sizing: border-box; box-shadow: #6badde 0px 0px 0px 9999px inset; border-style: solid; padding: 12px; border-color: #dee2e6; border-width: 1px; vertical-align: top; text-align: center; background-color: #6badde;">
+                                <font class="text-black" style="box-sizing:border-box;color:#000000;">
+                                    <b style="box-sizing:border-box;font-weight:bolder;">Customer Reference</b>
+                                </font>
+                            </td>
+                            <td style="border-left-width:1px;border-bottom-width:1px;border-right-width:1px;border-top-width:1px;border-left-color:#dee2e6;border-bottom-color:#dee2e6;border-right-color:#dee2e6;border-top-color:#dee2e6;box-sizing: border-box; box-shadow: #6badde 0px 0px 0px 9999px inset; border-style: solid; padding: 12px; border-color: #dee2e6; border-width: 1px; vertical-align: top; text-align: center; background-color: #6badde;">
+                                <font class="text-black" style="box-sizing:border-box;color:#000000;">
+                                    <b style="box-sizing:border-box;font-weight:bolder;">Order Date</b>
+                                </font>
+                            </td>
+                            <td style="border-left-width:1px;border-bottom-width:1px;border-right-width:1px;border-top-width:1px;border-left-color:#dee2e6;border-bottom-color:#dee2e6;border-right-color:#dee2e6;border-top-color:#dee2e6;box-sizing: border-box; box-shadow: #6badde 0px 0px 0px 9999px inset; border-style: solid; padding: 12px; border-color: #dee2e6; border-width: 1px; vertical-align: top; text-align: center; background-color: #6badde;">
+                                <font class="text-black" style="box-sizing:border-box;color:#000000;">
+                                    <b style="box-sizing:border-box;font-weight:bolder;">Delivery Address</b>
+                                </font>
+                            </td>
+                        </tr>
+                        <tr style="border-style:solid;box-sizing:border-box;border-left-width:0px;border-bottom-width:1px;border-right-width:0px;border-top-width:1px;border-left-color:inherit;border-bottom-color:inherit;border-right-color:inherit;border-top-color:inherit;">
+                            <td style="border-left-width:1px;border-bottom-width:1px;border-right-width:1px;border-top-width:1px;border-left-color:#dee2e6;border-bottom-color:#dee2e6;border-right-color:#dee2e6;border-top-color:#dee2e6;box-sizing: border-box; box-shadow: #ffffff 0px 0px 0px 9999px inset; background-color: transparent; border-style: solid; padding: 12px; border-color: #dee2e6; border-width: 1px; vertical-align: top;">
+                                <t t-out="object.name">
+                                    <br/>
+                                </t>
+                            </td>
+                            <td style="border-left-width:1px;border-bottom-width:1px;border-right-width:1px;border-top-width:1px;border-left-color:#dee2e6;border-bottom-color:#dee2e6;border-right-color:#dee2e6;border-top-color:#dee2e6;box-sizing: border-box; box-shadow: #ffffff 0px 0px 0px 9999px inset; background-color: transparent; border-style: solid; padding: 12px; border-color: #dee2e6; border-width: 1px; vertical-align: top;">
+                                <t t-if="object.client_order_ref">
+                                    <t t-out="object.client_order_ref">
+                                        <br/>
+                                    </t>
+
+                                </t>
+                            </td>
+                            <td style="border-left-width:1px;border-bottom-width:1px;border-right-width:1px;border-top-width:1px;border-left-color:#dee2e6;border-bottom-color:#dee2e6;border-right-color:#dee2e6;border-top-color:#dee2e6;box-sizing: border-box; box-shadow: #ffffff 0px 0px 0px 9999px inset; background-color: transparent; border-style: solid; padding: 12px; border-color: #dee2e6; border-width: 1px; vertical-align: top;">
+                                <t t-out="object.date_order.strftime('%d/%m/%Y')">
+                                    <br/>
+                                </t>
+                            </td>
+                            <td style="border-left-width:1px;border-bottom-width:1px;border-right-width:1px;border-top-width:1px;border-left-color:#dee2e6;border-bottom-color:#dee2e6;border-right-color:#dee2e6;border-top-color:#dee2e6;box-sizing: border-box; box-shadow: #ffffff 0px 0px 0px 9999px inset; background-color: transparent; border-style: solid; padding: 12px; border-color: #dee2e6; border-width: 1px; vertical-align: top;">
+                                <t t-out="object.partner_shipping_id.display_name">
+                                    <br/>
+                                    <t t-out="object.partner_shipping_id.contact_address_complete"/>
+                                </t>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+                <br/><br/>
+                <p style="margin:0pt 0 0pt 0in;box-sizing:border-box;font-size:13px;font-family:'Lucida Grande', Helvetica, Verdana, Arial, sans-serif;margin-top:0pt;margin-bottom: 0pt; margin-left: 0in; direction: ltr; unicode-bidi: embed; word-break: normal;">
+                    <span style="color:#454748;font-family: Helvetica; font-size: 12px;">Nexconec France</span>
+                </p>
+                <p style="margin:0pt 0 0pt 0in;box-sizing:border-box;font-size:13px;font-family:'Lucida Grande', Helvetica, Verdana, Arial, sans-serif;margin-top:0pt;margin-bottom: 0pt; margin-left: 0in; direction: ltr; unicode-bidi: embed; word-break: normal;">
+                    <span style="color:#454748;font-family: Helvetica; font-size: 12px;">224, Rue du champ du roy</span>
+                </p>
+                <p style="margin:0pt 0 0pt 0in;box-sizing:border-box;font-size:13px;font-family:'Lucida Grande', Helvetica, Verdana, Arial, sans-serif;margin-top:0pt;margin-bottom: 0pt; margin-left: 0in; direction: ltr; unicode-bidi: embed; word-break: normal;">
+                    <span style="color:#454748;font-family: Helvetica; font-size: 12px;">38670 Chasse-sur-Rhône France</span>
+                </p>
+                <p style="box-sizing:border-box;margin:0px;font-size:13px;font-family:'Lucida Grande', Helvetica, Verdana, Arial, sans-serif;padding:0px;"/>
+                <p style="margin:0pt 0 0pt 0in;box-sizing:border-box;font-size:13px;font-family:'Lucida Grande', Helvetica, Verdana, Arial, sans-serif;margin-top:0pt;margin-bottom: 0pt; margin-left: 0in; direction: ltr; unicode-bidi: embed; word-break: normal;">
+                    <span style="font-family:Helvetica;font-size: 12px;">
+                        <font color="#008784">
+                            <u>contact@nexconec.fr</u>
+                        </font>
+                    </span>
+                    <span style="color:#2e74b5;font-family: Helvetica; font-size: 12px;">+33 4 82 31 52 01</span>
+                </p>
+                <br/>
+
+            </div>
+        </field>
+    </record>
+
+</odoo>

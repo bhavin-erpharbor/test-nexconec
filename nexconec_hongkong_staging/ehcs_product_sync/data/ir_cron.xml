@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo noupdate="1">
+    <record id="ir_cron_ehcs_sync_product_attributes_to_remote_db" model="ir.cron">
+        <field name="name">EHCS France → Hong Kong Sync Product Attributes</field>
+        <field name="model_id" ref="product.model_product_attribute"/>
+        <field name="state">code</field>
+        <field name="code">model.ehcs_cron_sync_product_attributes_to_remote_db()</field>
+        <field name="interval_number">1</field>
+        <field name="interval_type">days</field>
+        <field name="active">True</field>
+    </record>
+
+    <record id="ir_cron_ehcs_sync_products_to_remote_db" model="ir.cron">
+        <field name="name">EHCS France → Hong Kong Sync Products and Variants</field>
+        <field name="model_id" ref="product.model_product_template"/>
+        <field name="state">code</field>
+        <field name="code">model.ehcs_cron_sync_products_to_remote_db()</field>
+        <field name="interval_number">30</field>
+        <field name="interval_type">minutes</field>
+        <field name="active">False</field>
+    </record>
+</odoo>

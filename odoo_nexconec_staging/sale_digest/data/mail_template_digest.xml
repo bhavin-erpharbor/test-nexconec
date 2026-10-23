@@ -1,0 +1,215 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+  <data noupdate="0">
+    <record id="email_template_digest" model="mail.template">
+      <field name="name">Digest Commercial Hebdomadaire</field>
+      <field name="model_id" ref="base.model_res_users"/>
+      <field name="subject">📊 Votre digest commercial — Période du ${ctx.get('date_start') or ''}</field>
+      <field name="email_from">${object.company_id.email or user.email}</field>
+      <field name="email_to">${object.email}</field>
+      <field name="lang">fr_FR</field>
+      <field name="auto_delete">False</field>
+
+      <field name="body_html"><![CDATA[
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+</head>
+<body style="margin:0;padding:0;background:#F0F2F5;font-family:'Segoe UI',Arial,sans-serif;color:#1A1F2E;line-height:1.5;">
+
+<table width="100%" cellpadding="0" cellspacing="0" style="background:#F0F2F5;padding:30px 10px;">
+<tr><td align="center">
+
+<table width="680" cellpadding="0" cellspacing="0" style="max-width:680px;background:#ffffff;border-radius:8px;overflow:hidden;">
+
+  <!-- HEADER -->
+  <tr>
+    <td style="background:linear-gradient(135deg,#1B4F99,#2E7DF7);padding:36px 40px;color:#fff;">
+      <table width="100%">
+        <tr>
+          <td style="font-size:22px;font-weight:700;">
+            <t t-esc="(ctx or {}).get('company') and (ctx or {}).get('company').name or object.company_id.name"/>
+          </td>
+        </tr>
+        <tr>
+          <td colspan="2" style="padding-top:20px;">
+            <div style="font-size:24px;font-weight:700;">Bonjour <t t-esc="object.name"/> 👋</div>
+            <div style="font-size:15px;opacity:0.9;">Voici votre récap commercial — bonne lecture !</div>
+          </td>
+        </tr>
+      </table>
+    </td>
+  </tr>
+
+  <!-- KPIs -->
+  <tr>
+    <td style="background:#F8FBFF;padding:24px 0;border-bottom:1px solid #E5EDF9;">
+      <table width="100%">
+        <tr>
+          <!-- CA Réalisé -->
+          <td width="33%" align="center" style="border-right:1px solid #DDE6F5;padding:0 10px;">
+            <div style="font-size:24px;font-weight:800;color:#1B4F99;"><t t-esc="(ctx or {}).get('kpi_ca','0 €')"/></div>
+            <div style="font-size:11px;font-weight:600;color:#7B8AAA;text-transform:uppercase;margin-top:4px;">CA réalisé (mois HT)</div>
+            <div style="font-size:11px;font-weight:600;margin-top:6px;color:#9AA3B5;line-height:1.6;">
+              vs M-1 : <t t-esc="(ctx or {}).get('kpi_ca_vs_m1','—')"/><br/>
+              vs N-1 : <t t-esc="(ctx or {}).get('kpi_ca_vs_n1','—')"/>
+            </div>
+          </td>
+          <!-- Facturation Mensuelle -->
+          <td width="33%" align="center" style="border-right:1px solid #DDE6F5;padding:0 10px;">
+            <div style="font-size:24px;font-weight:800;color:#2E7DF7;"><t t-esc="(ctx or {}).get('facturation_mensuelle_current','0 €')"/></div>
+            <div style="font-size:11px;font-weight:600;color:#7B8AAA;text-transform:uppercase;margin-top:4px;">Facturation vs objectif (mensuel)</div>
+            <div style="font-size:12px;font-weight:700;margin-top:6px;color:#2E7DF7;">
+              Obj. <t t-esc="(ctx or {}).get('facturation_mensuelle_target','—')"/> (<t t-esc="(ctx or {}).get('facturation_mensuelle_pct', 0)"/>%)
+            </div>
+          </td>
+          <!-- Facturation Annuelle -->
+          <td width="33%" align="center" style="padding:0 10px;">
+            <div style="font-size:24px;font-weight:800;color:#1DB868;"><t t-esc="(ctx or {}).get('facturation_annuelle_current','0 €')"/></div>
+            <div style="font-size:11px;font-weight:600;color:#7B8AAA;text-transform:uppercase;margin-top:4px;">Facturation vs objectif (annuel)</div>
+            <div style="font-size:12px;font-weight:700;margin-top:6px;color:#1DB868;">
+              Obj. <t t-esc="(ctx or {}).get('facturation_annuelle_target','—')"/> (<t t-esc="(ctx or {}).get('facturation_annuelle_pct', 0)"/>%)
+            </div>
+            <div style="font-size:11px;font-weight:600;margin-top:4px;color:#9AA3B5;">
+              vs N-1 : <t t-esc="(ctx or {}).get('facturation_annuelle_vs_n1','—')"/>
+            </div>
+          </td>
+        </tr>
+      </table>
+    </td>
+  </tr>
+
+  <!-- PROGRESSION FACTURATION -->
+  <tr>
+    <td style="padding:32px 40px 0;">
+      <div style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:1px;color:#9AA3B5;margin-bottom:14px;">📊 Progression de la facturation</div>
+
+      <!-- Mensuel -->
+      <div style="margin-bottom:24px;">
+        <div style="display:flex;justify-content:space-between;font-size:13px;margin-bottom:6px;">
+          <span>Objectif mensuel</span>
+          <span><strong><t t-esc="(ctx or {}).get('facturation_mensuelle_current','0 €')"/></strong> / <t t-esc="(ctx or {}).get('facturation_mensuelle_target','—')"/></span>
+        </div>
+        <t t-set="pct_mensuel" t-value="(ctx or {}).get('facturation_mensuelle_pct', 0)"/>
+        <table width="100%" cellpadding="0" cellspacing="0" style="background:#EEF1F8;height:12px;border-radius:6px;overflow:hidden;">
+          <tr>
+            <td t-attf-style="width: {{ pct_mensuel }}%; background:linear-gradient(90deg,#2E7DF7,#1DB868);height:12px;"></td>
+            <td t-attf-style="width: {{ 100 - pct_mensuel }}%;"></td>
+          </tr>
+        </table>
+        <div style="text-align:right;font-size:12px;color:#9AA3B5;margin-top:5px;"><t t-esc="pct_mensuel"/>% atteint</div>
+      </div>
+
+      <!-- Annuel -->
+      <div>
+        <div style="display:flex;justify-content:space-between;font-size:13px;margin-bottom:6px;">
+          <span>Objectif annuel</span>
+          <span><strong><t t-esc="(ctx or {}).get('facturation_annuelle_current','0 €')"/></strong> / <t t-esc="(ctx or {}).get('facturation_annuelle_target','—')"/></span>
+        </div>
+        <t t-set="pct_annuel" t-value="(ctx or {}).get('facturation_annuelle_pct', 0)"/>
+        <table width="100%" cellpadding="0" cellspacing="0" style="background:#EEF1F8;height:12px;border-radius:6px;overflow:hidden;">
+          <tr>
+            <td t-attf-style="width: {{ pct_annuel }}%; background:linear-gradient(90deg,#1B4F99,#2E7DF7);height:12px;"></td>
+            <td t-attf-style="width: {{ 100 - pct_annuel }}%;"></td>
+          </tr>
+        </table>
+        <div style="text-align:right;font-size:12px;color:#9AA3B5;margin-top:5px;"><t t-esc="pct_annuel"/>% atteint</div>
+      </div>
+    </td>
+  </tr>
+
+  <!-- DÉTAIL BOOKING -->
+  <tr>
+    <td style="padding:32px 40px 0;">
+      <div style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:1px;color:#9AA3B5;margin-bottom:14px;">📦 Détail des bookings (HT)</div>
+      <table width="100%" cellpadding="0" cellspacing="0">
+        <tr>
+          <td style="border:1px solid #E5EDF9;border-radius:8px;padding:20px;width:50%;vertical-align:top;">
+            <div style="font-size:11px;font-weight:700;text-transform:uppercase;color:#9AA3B5;">Booking mois en cours</div>
+            <div style="font-size:24px;font-weight:800;color:#1B4F99;margin-top:8px;"><t t-esc="(ctx or {}).get('booking_month','0 €')"/></div>
+            <div style="font-size:12px;color:#9AA3B5;margin-top:6px;">
+              vs N-1 : <t t-esc="(ctx or {}).get('booking_month_vs_n1','—')"/>
+            </div>
+          </td>
+          <td width="16"></td>
+          <td style="border:1px solid #E5EDF9;border-radius:8px;padding:20px;width:50%;vertical-align:top;">
+            <div style="font-size:11px;font-weight:700;text-transform:uppercase;color:#9AA3B5;">Booking année en cours</div>
+            <div style="font-size:24px;font-weight:800;color:#1B4F99;margin-top:8px;"><t t-esc="(ctx or {}).get('booking_year','0 €')"/></div>
+            <div style="font-size:12px;color:#9AA3B5;margin-top:6px;">
+              vs N-1 : <t t-esc="(ctx or {}).get('booking_year_vs_n1','—')"/>
+            </div>
+          </td>
+        </tr>
+      </table>
+    </td>
+  </tr>
+
+  <!-- OPPORTUNITÉS (top 10) -->
+  <tr>
+    <td style="padding:32px 40px 0;">
+      <div style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:1px;color:#9AA3B5;margin-bottom:12px;">📌 Opportunités actives (top 10)</div>
+      <table width="100%" cellpadding="0" cellspacing="0" style="border-collapse:collapse;">
+        <thead>
+          <tr style="background:#F8FBFF;">
+            <th style="text-align:left;padding:10px 8px;font-size:11px;color:#9AA3B5;">Client / Affaire</th>
+            <th style="text-align:left;padding:10px 8px;font-size:11px;color:#9AA3B5;">Étape</th>
+            <th style="text-align:right;padding:10px 8px;font-size:11px;color:#9AA3B5;">Montant</th>
+            <th style="text-align:left;padding:10px 8px;font-size:11px;color:#9AA3B5;">Clôture</th>
+          </tr>
+        </thead>
+        <tbody>
+          <t t-foreach="(ctx or {}).get('opportunities', [])" t-as="opp">
+          <tr>
+            <td style="padding:12px 8px;border-bottom:1px solid #F0F3FA;">
+              <strong><t t-esc="opp.partner_id.name or '—'"/></strong>
+              <t t-if="opp.name"> — <t t-esc="opp.name"/></t>
+            </td>
+            <td style="padding:12px 8px;border-bottom:1px solid #F0F3FA;">
+              <span t-attf-style="display:inline-block;padding:4px 12px;border-radius:999px;font-size:11px;font-weight:600;background:{{ '#D4F4E5;color:#0D7A47' if opp.probability == 100 else '#FDECEA;color:#C0392B' if not opp.active else '#FFF6E5;color:#B36B00' if opp.probability &lt; 30 else '#EAF1FF;color:#1B4F99' }};">
+                <t t-esc="opp.stage_id.name"/>
+              </span>
+            </td>
+            <td style="padding:12px 8px;border-bottom:1px solid #F0F3FA;text-align:right;font-weight:700;">
+              <t t-esc="'{:,.0f} €'.format(opp.expected_revenue).replace(',', ' ') if opp.expected_revenue else '—'"/>
+            </td>
+            <td style="padding:12px 8px;border-bottom:1px solid #F0F3FA;">
+              <t t-esc="opp.date_deadline.strftime('%d/%m/%Y') if opp.date_deadline else '—'"/>
+            </td>
+          </tr>
+          </t>
+          <t t-if="not (ctx or {}).get('opportunities')">
+          <tr><td colspan="4" style="text-align:center;padding:40px;color:#9AA3B5;">Aucune opportunité active sur la période.</td></tr>
+          </t>
+        </tbody>
+      </table>
+    </td>
+  </tr>
+
+  <!-- CTA -->
+  <tr>
+    <td style="padding:40px 40px 40px;text-align:center;">
+      <a t-att-href="(ctx or {}).get('base_url', '') + '/odoo/crm'" style="background:#2E7DF7;color:#ffffff;text-decoration:none;padding:14px 38px;border-radius:6px;font-weight:700;font-size:15px;display:inline-block;">
+        Voir mon CRM complet →
+      </a>
+    </td>
+  </tr>
+
+  <!-- FOOTER -->
+  <tr>
+    <td style="background:#F8FBFF;padding:24px 40px;text-align:center;font-size:12px;color:#9AA3B5;border-top:1px solid #E5EDF9;">
+      <t t-esc="object.company_id.name"/> · Digest commercial<br>
+      Période sélectionnée : <t t-esc="(ctx or {}).get('date_start')"/> → <t t-esc="(ctx or {}).get('date_end')"/>
+    </td>
+  </tr>
+
+</table>
+</td></tr>
+</table>
+</body>
+</html>
+      ]]></field>
+    </record>
+  </data>
+</odoo>

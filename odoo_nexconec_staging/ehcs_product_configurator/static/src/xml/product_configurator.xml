@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<templates id="template" xml:space="preserve">
+    <t t-inherit="sale.Product" t-inherit-mode="extension">
+        <xpath expr="//td[hasclass('o_sale_product_configurator_qty')]" position="inside">
+            <div t-if="!this.props.optional &amp;&amp; this.env.mainProductTmplId === this.props.product_tmpl_id" style="margin-top:5px;" id="config_prod_dynamic_table">
+                <div style="margin-bottom:5px;">
+                    <button class="btn btn-primary add_multi_product js_add_multi"
+                        aria-label="Add a line"
+                        string="Add a line"
+                        t-att-class="{'disabled': !this.env.isPossibleCombination(this.props)}"
+                        t-on-click="() => this.env.addMultiProduct(this.props.product_tmpl_id)">
+                        Add Product
+                    </button>
+                </div>
+                <table id="config_variant_table" class="table table-sm table-bordered config-table" width="100%">
+                    <thead>
+                        <tr>
+                            <th width="40%" class="o_grid_title_header">Ref</th>
+                            <th width="40%" class="o_grid_title_header">QTY</th>
+                            <th width="20%" class="o_grid_title_header"><!-- Remove --></th>
+                        </tr>
+                    </thead>
+                    <tbody id="sol_product_tbody">
+                    </tbody>
+                </table>
+            </div>
+        </xpath>
+    </t>
+</templates>

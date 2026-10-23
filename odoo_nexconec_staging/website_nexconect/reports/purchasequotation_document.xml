@@ -1,0 +1,114 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<odoo>
+    <template id="report_purchasequotation_document_nexconect" priority="10000001" inherit_id="purchase.report_purchasequotation_document">
+        <xpath expr="//t[@t-call='web.external_layout']" position="replace">
+            <t t-call="web.external_layout">
+                <t t-set="o" t-value="o.with_context(lang=o.partner_id.lang)"/>
+                <t t-set="forced_vat" t-value="o.fiscal_position_id.foreign_vat"/> <!-- So that it appears in the footer of the report instead of the company VAT if it's set -->
+                <t t-set="address">
+                    <t t-if="o.dest_address_id">
+                        <strong t-if="o.dest_address_id">Adresse de livraison :</strong>
+                        <div t-field="o.dest_address_id" 
+                            t-options="{&quot;widget&quot;: &quot;contact&quot;, 
+                                        &quot;fields&quot;: [&quot;address&quot;, &quot;name&quot;, &quot;phone&quot;], 
+                                        &quot;no_marker&quot;: True, 
+                                        &quot;phone_icons&quot;: True}"
+                            name="purchase_shipping_address"/>
+                        <p>Contact : <span t-field="o.x_studio_drop_ship_contact_1.name"/></p>
+                    </t>
+                </t>
+                <t t-set="information_block">
+                    <strong>Vendor/Supplier:</strong>
+                    <div t-if="o.partner_id">
+                        <div t-field="o.partner_id" 
+                            t-options="{&quot;widget&quot;: &quot;contact&quot;, 
+                                        &quot;fields&quot;: [&quot;address&quot;, &quot;name&quot;, &quot;phone&quot;], 
+                                        &quot;no_marker&quot;: True, 
+                                        &quot;phone_icons&quot;: True}" 
+                            name="purchase_partner_address"/>
+                        <p t-if="o.partner_id.vat"><t t-esc="o.company_id.country_id.vat_label or 'Tax ID'"/>: <span t-field="o.partner_id.vat"/></p>
+                    </div>
+                </t>
+                <div class="page">
+                    <div class="oe_structure"/>
+        
+                    <h2>Request for Quotation <span t-field="o.name"/></h2>
+        
+                    <table class="table table-sm o_main_table mt-4 table-borderless">
+                        <thead style="display: table-row-group;border-bottom: 1px solid lightgrey;border-top: 1px solid lightgrey; ">
+                            <tr>
+                                <th name="" class="text-left"><strong>Line No</strong></th>
+                                <th name="th_description"><strong>Description</strong></th>
+                                <th name="th_expected_date" class="text-center"><strong>Expected Date</strong></th>
+                                <th name="th_quantity" class="text-right"><strong>Qty</strong></th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <t t-foreach="o.order_line" t-as="order_line">
+                                <tr t-att-class="'bg-200 font-weight-bold o_line_section' if order_line.display_type == 'line_section' else 'font-italic o_line_note' if order_line.display_type == 'line_note' else ''" style="border-bottom: 1px solid lightgrey;">
+                                    <t t-if="not order_line.display_type">
+                                        <td style="padding-left:3px;text-align:center;"><span t-esc="order_line_index + 1"/></td>
+                                        <td id="product">
+                                            <span t-field="order_line.name"/>
+                                        </td>
+                                        <td class="text-center">
+                                            <span t-field="order_line.date_planned" t-options="{'date_only': 'true'}"/>
+                                        </td>
+                                        <td class="text-end">
+                                            <span t-field="order_line.product_qty"/>
+                                            <span t-field="order_line.product_uom_id" groups="uom.group_uom"/>
+                                            <span t-if="order_line.product_uom_id != order_line.product_id.uom_id" class="text-muted small">
+                                            <br/>
+                                                <span t-field="order_line.product_uom_qty" t-options="{'widget': 'float', 'decimal_precision': 'Product Unit'}"/> <span t-field="order_line.product_id.uom_id"/>
+                                            </span>
+                                        </td>
+                                    </t>
+                                    <t t-else="">
+                                        <td colspan="99" id="section">
+                                            <span t-field="order_line.name"/>
+                                        </td>
+                                    </t>
+                                </tr>
+                            </t>
+                        </tbody>
+                    </table>
+        
+                    <p t-field="o.note" class="mt-4"/>
+        
+                    <div class="oe_structure"/>
+
+                    <t t-set="base_address" t-value="o.env['ir.config_parameter'].sudo().get_param('web.base.url')"/>
+                    <t t-set="portal_url" t-value="base_address + '/my/purchase/' + str(o.id) + '#portal_connect_software_modal'"/>
+                    <div t-if="any(u._is_portal() for u in o.partner_id.user_ids) and o._get_edi_builders()" class="text-center">
+                        <a t-att-href="portal_url">Connect your software</a> with <t t-out="o.company_id.name"/> to create quotes automatically.
+                    </div>
+                </div>
+            </t>
+        </xpath>
+    </template>
+
+    <template id="purchase_stock.report_purchasequotation_document" inherit_id="purchase.report_purchasequotation_document">
+        <xpath expr="//t[@t-if='o.dest_address_id']" position="after">
+            <t t-else="">
+                <strong t-if="o.picking_type_id">Adresse de livraison :</strong>
+                <div t-if="o.picking_type_id">
+                        <span t-field="o.picking_type_id.warehouse_id.name"/>
+                        <div t-field="o.picking_type_id.warehouse_id.partner_id" 
+                            t-options="{&quot;widget&quot;: &quot;contact&quot;, 
+                                         &quot;fields&quot;: [&quot;address&quot;, &quot;phone&quot;],  
+                                         &quot;no_marker&quot;: True,  
+                                         &quot;phone_icons&quot;: True}"/> 
+                </div>
+            </t>
+        </xpath>
+        <xpath expr="//span[@t-field='o.name']/.." position="after">
+            <div id="informations" class="row mt16 mb16">
+                <div t-if="o.incoterm_id" class="col-3 bm-2">
+                    <strong>Incoterm:</strong>
+                    <p t-field="o.incoterm_id.code" class="m-0"/>
+                </div>
+            </div>
+        </xpath>
+    </template>
+    
+</odoo>

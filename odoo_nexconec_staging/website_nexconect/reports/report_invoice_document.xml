@@ -1,0 +1,510 @@
+<odoo>
+
+    <template id="report_invoice_document_nexconect" priority="10000001" inherit_id="account.report_invoice_document">
+        <xpath expr="//t[@t-call='web.external_layout']" position="replace">
+            <t t-call="web.external_layout">
+                <t t-set="o" t-value="o.with_context(lang=lang)"/>
+                <t t-set="address">
+                    <t t-if="o.partner_shipping_id">
+                        <strong t-if="o.partner_shipping_id">Delivery Adress :</strong>
+                        <div t-field="o.partner_shipping_id"
+                            t-options="{&quot;widget&quot;: &quot;contact&quot;,
+                                        &quot;fields&quot;: [&quot;address&quot;, &quot;name&quot;, &quot;phone&quot;],
+                                        &quot;no_marker&quot;: True,
+                                        &quot;phone_icons&quot;: True}"
+                            name="partner_shipping_id"/>
+                        <!-- <p>Contact : <span t-field="o.x_studio_drop_ship_contact_1.name"/></p> -->
+                    </t>
+                </t>
+                <t t-set="information_block">
+                    <strong>Invoice Adress:</strong>
+                    <div t-if="o.partner_id">
+                        <div t-field="o.partner_id"
+                             t-options="{&quot;widget&quot;: &quot;contact&quot;,
+                                        &quot;fields&quot;: [&quot;address&quot;, &quot;name&quot;, &quot;phone&quot;],
+                                        &quot;no_marker&quot;: True,
+                                        &quot;phone_icons&quot;: True}"
+                            name="purchase_partner_address"/>
+                        <p t-if="o.partner_id.vat"><t t-esc="o.company_id.country_id.vat_label or 'Tax ID'"/>: <span t-field="o.partner_id.vat"/></p>
+                    </div>
+                </t>
+                <div class="page">
+                    <h2>
+                        <span t-if="o.move_type == 'out_invoice' and o.state == 'posted'" style="color:#026497;">Invoice</span>
+                        <span t-if="o.move_type == 'out_invoice' and o.state == 'draft'" style="color:#026497;">Draft Invoice</span>
+                        <span t-if="o.move_type == 'out_invoice' and o.state == 'cancel'" style="color:#026497;">Cancelled Invoice</span>
+                        <span t-if="o.move_type == 'out_refund'" style="color:#026497;">Credit Note</span>
+                        <span t-if="o.move_type == 'in_refund'" style="color:#026497;">Vendor Credit Note</span>
+                        <span t-if="o.move_type == 'in_invoice'" style="color:#026497;">Vendor Bill</span>
+                        <span t-if="o.name != '/'" t-field="o.name" style="color:#026497;"/>
+                    </h2>
+                    <div id="informations" class="row mt32 mb32">
+                        <div class="col" t-if="o.invoice_date"  name="invoice_date">
+                            <strong style="color:#026497;">Invoice Date:</strong>
+                            <p class="m-0" t-field="o.invoice_date"/>
+                        </div>
+                        <div class="col" t-if="o.invoice_date_due and o.move_type == 'out_invoice' and o.state == 'posted'" name="due_date">
+                            <strong style="color:#026497;">Due Date:</strong>
+                            <p class="m-0" t-field="o.invoice_date_due"/>
+                        </div>
+                        <div class="col" t-if="o.invoice_origin" name="origin">
+                            <strong style="color:#026497;">Source:</strong>
+                            <p class="m-0" t-field="o.invoice_origin"/>
+                        </div>
+                        <div class="col" t-if="o.partner_id.ref" name="customer_code">
+                            <strong style="color:#026497;">Customer Code:</strong>
+                            <p class="m-0" t-field="o.partner_id.ref"/>
+                        </div>
+                        <div class="col" t-if="o.ref" name="reference">
+                            <strong style="color:#026497;">Reference:</strong>
+                            <p class="m-0" t-field="o.ref"/>
+                        </div>
+                    </div>
+                    <div id="informations2" class="row mt32 mb32">
+                        <t t-if="o.invoice_line_ids and o.invoice_line_ids.sale_line_ids and o.invoice_line_ids.sale_line_ids[0] and o.invoice_line_ids.sale_line_ids[0].order_id and  o.invoice_line_ids.sale_line_ids[0].order_id.picking_ids">
+                            <div class="col" name="reference">
+                                <strong style="color:#026497;">Delivery Ref:</strong>
+                                <!-- <strong style="color:#026497;" >Delivery Ref:</strong> -->
+                                <t t-foreach="o.invoice_line_ids.sale_line_ids[0].order_id.picking_ids" t-as="picking">
+                                    <t t-if="picking.picking_type_id and picking.picking_type_id.code == 'outgoing'">
+                                        <p class="m-0" t-field="picking.name"/>
+                                    </t>
+                                </t>
+                            </div>
+                        </t>
+                        <div class="col" t-if="o.x_studio_tracking_ref" name="x_studio_tracking_ref">
+                            <strong>Tracking Number :</strong>
+                            <p class="m-0" t-field="o.x_studio_tracking_ref"/>
+                        </div>
+                        <div class="col" t-if="o.invoice_payment_term_id" name="invoice_payment_term_id">
+                            <strong>Payment Terms :</strong>
+                            <p class="m-0" t-field="o.invoice_payment_term_id"/>
+                        </div>
+                        <div class="col" t-if="o.invoice_incoterm_id" name="invoice_incoterm_id">
+                            <strong>Incoterm :</strong>
+                            <p class="m-0" t-field="o.invoice_incoterm_id"/>
+                        </div>
+                    </div>
+
+                    <t t-set="display_discount" t-value="any(l.discount for l in o.invoice_line_ids)"/>
+                    <t t-set="display_taxes" t-value="any(l.tax_ids for l in o.invoice_line_ids)"/>
+                    <div class="oe_structure"></div>
+
+                    <table class="table table-sm o_main_table mt-4 table-borderless">
+                        <thead style="display: table-row-group;border-bottom: 1px solid lightgrey;border-top: 1px solid lightgrey; ">
+                            <tr>
+                                <!-- TODO: remove in master -->
+                                <t t-set="colspan" t-value="6"/>
+                                <th name="" class="text-left" style="color:#026497;">Line No</th>
+                                <th name="th_description" style="color:#026497;" class="text-start"><span>Description</span></th>
+                                <th name="th_hs_code" style="color:#026497;"><span>HS Code</span></th>
+                                <!-- TODO: remove in master -->
+                                <th name="th_quantity" class="text-end" style="color:#026497;"><span>Quantité</span></th>
+                                <th name="th_priceunit" t-attf-class="text-end {{ 'd-none d-md-table-cell' if report_type == 'html' else '' }}" style="color:#026497;"><span>Prix unitaire</span></th>
+                                <th name="th_price_unit" t-if="display_discount" t-attf-class="text-end {{ 'd-none d-md-table-cell' if report_type == 'html' else '' }}" style="color:#026497;">
+                                    <span>Disc.%</span>
+                                    <!-- TODO: remove in master -->
+                                    <t t-set="colspan" t-value="colspan+1"/>
+                                </th>
+                                <th name="th_taxes"  t-if="display_taxes" t-attf-class="text-end {{ 'd-none d-md-table-cell' if report_type == 'html' else '' }}" style="color:#026497;"><span>Taxes</span></th>
+                                <th name="th_subtotal" class="text-end">
+                                    <span style="color:#026497;">Montant</span>
+                                </th>
+                            </tr>
+                        </thead>
+                        <tbody class="invoice_tbody">
+                            <t t-set="lines" t-value="o.invoice_line_ids.sorted(key=lambda l: (-l.sequence, l.date, l.move_name, -l.id), reverse=True)"/>
+                            <t t-set="lines_to_report" t-value="o._get_move_lines_to_report()"/>
+                            <t t-set="current_section" t-value="None"/>
+                            <t t-set="current_subsection" t-value="None"/>
+
+                            <t t-foreach="lines_to_report" t-as="line">
+                                <t t-set="is_note" t-value="line.display_type == 'line_note'"/>
+                                <t t-set="is_section" t-value="line.display_type == 'line_section'"/>
+                                <t t-set="is_subsection" t-value="line.display_type == 'line_subsection'"/>
+                                <t t-set="is_product" t-value="line.display_type == 'product'"/>
+
+                                <t t-if="is_section">
+                                    <t t-set="current_section" t-value="line"/>
+                                    <t t-set="current_subsection" t-value="None"/>
+                                    <t t-set="line_padding" t-value="0"/>
+                                </t>
+                                <t t-elif="is_subsection">
+                                    <t t-set="current_subsection" t-value="line"/>
+                                    <t t-set="line_padding" t-value="3"/>
+                                </t>
+                                <t t-else="">
+                                    <t t-set="line_padding"
+                                       t-value="4 if current_subsection else (3 if current_section else 0)"
+                                    />
+                                </t>
+                                <t t-set="padding_class" t-value="line_padding and ('px-' + str(line_padding)) or ''"/>
+                                <t t-set="hide_details" t-value="line.collapse_composition"/>
+                                <t t-set="hide_prices" t-value="line.collapse_prices"/>
+
+                                <t t-if="not hide_details and not hide_prices">
+                                    <tr t-att-class="
+                                        'fw-bolder o_line_section' if is_section else
+                                        'fw-bold o_line_subsection' if is_subsection else
+                                        'fst-italic o_line_note' if is_note
+                                        else ''">
+                                        <t t-set="line_colspan" t-value="3 + (1 if display_discount else 0) + (1 if display_taxes and not line.tax_ids else 0)"/>
+                                        <t t-if="is_product" name="account_invoice_line_accountable">
+                                            <td style="padding-left:3px;text-align:center;"><span t-esc="line_index + 1"/></td>
+                                            <td name="account_invoice_line_name" t-att-class="padding_class">
+                                                <span t-if="line.name" t-field="line.name" t-options="{'widget': 'text'}">Bacon Burger</span>
+                                            </td>
+                                            <td name="hs_code">
+                                                <span t-field="line.product_id.hs_code"/>
+                                            </td>
+                                            <td name="td_quantity" class="o_td_quantity text-end">
+                                                <span t-field="line.quantity" class="text-nowrap">3.00</span>
+                                                <span t-field="line.product_uom_id"  groups="uom.group_uom">units</span>
+                                                <span t-if="line.product_uom_id != line.product_id.uom_id" groups="uom.group_uom" class="text-muted small">
+                                                    <br/>
+                                                    <t t-set="product_uom_qty" t-value="line.product_uom_id._compute_quantity(line.quantity, line.product_id.uom_id)"/>
+                                                    <span t-out="product_uom_qty" t-options="{'widget': 'float', 'decimal_precision': 'Product Unit'}" data-oe-demo="3.00"/> <span t-field="line.product_id.uom_id" data-oe-demo="units"/>
+                                                </span>
+                                            </td>
+                                            <td name="td_price_unit" t-attf-class="text-end {{ 'd-none d-md-table-cell' if report_type == 'html' else '' }}">
+                                                <span t-if="not hide_prices" class="text-nowrap" t-field="line.price_unit">9.00</span>
+                                            </td>
+                                            <td name="td_discount" t-if="display_discount" t-attf-class="text-end {{ 'd-none d-md-table-cell' if report_type == 'html' else '' }}">
+                                                <span class="text-nowrap" t-field="line.discount">0</span>
+                                            </td>
+                                            <t t-set="taxes" t-value="', '.join(tax.tax_label for tax in line.tax_ids if tax.tax_label)"/>
+                                            <td name="td_taxes" t-if="display_taxes" t-attf-class="text-end {{ 'd-none d-md-table-cell' if report_type == 'html' else '' }} {{ 'text-nowrap' if len(taxes) &lt; 10 else '' }}">
+                                                <span t-if="not hide_prices" t-out="taxes" id="line_tax_ids">Tax 15%</span>
+                                            </td>
+                                            <td name="td_subtotal" class="text-end o_price_total">
+                                                <span t-if="not hide_prices and o.company_price_include == 'tax_excluded'" class="text-nowrap" t-field="line.price_subtotal">27.00</span>
+                                                <span t-if="not hide_prices and o.company_price_include == 'tax_included'" class="text-nowrap" t-field="line.price_total">31.05</span>
+                                            </td>
+                                        </t>
+                                        <t t-elif="line.display_type in ('line_section', 'line_subsection')">
+                                            <t t-set="section_subtotal" t-value="line.get_section_subtotal()"/>
+                                            <!-- For desktop -->
+                                            <td name="line_name_td"
+                                                t-att-colspan="(1 if is_product else line_colspan)"
+                                                t-attf-class="{{'d-none d-md-table-cell' if report_type == 'html' else ''}} {{padding_class}}">
+                                                <span t-if="line.name" t-field="line.name" t-options="{'widget': 'text'}">A section title</span>
+                                            </td>
+                                            <!-- For mobile -->
+                                            <td colspan="2" t-attf-class="{{'d-md-none d-table-cell' if report_type == 'html' else 'd-none'}} {{padding_class}}">
+                                                <span t-if="line.name" t-field="line.name" t-options="{'widget': 'text'}">A section title</span>
+                                            </td>
+                                            <td colspan="1" class="text-end o_price_total">
+                                                <span t-out="section_subtotal" class="text-nowrap" t-options='{"widget": "monetary", "display_currency": o.currency_id}'/>
+                                            </td>
+                                        </t>
+                                        <t t-elif="is_note">
+                                            <td colspan="99">
+                                                <span t-if="line.name" t-field="line.name" t-options="{'widget': 'text'}">A note, whose content usually applies to the section or product above.</span>
+                                            </td>
+                                        </t>
+                                    </tr>
+                                </t>
+                                <t t-else="">
+                                    <t t-set="grouped_lines" t-value="line._get_child_lines()"/>
+                                    <t t-foreach="grouped_lines" t-as="grouped_line">
+                                        <t t-if="grouped_line['display_type'] == 'product'">
+                                            <t t-set="line_colspan" t-value="1"/>
+                                        </t>
+                                        <t t-else="">
+                                            <t t-set="line_colspan" t-value="3 + (1 if display_discount else 0) + (1 if display_taxes and not grouped_line.get('taxes') else 0)"/>
+                                        </t>
+                                        <t t-if="hide_prices">
+                                            <t t-if="grouped_line['display_type'] == 'line_section'">
+                                                <t t-set="current_section" t-value="grouped_line"/>
+                                                <t t-set="current_subsection" t-value="None"/>
+                                            </t>
+                                            <t t-if="grouped_line['display_type'] == 'line_subsection'">
+                                                <t t-set="current_subsection" t-value="grouped_line"/>
+                                            </t>
+                                            <t t-set="line_padding"
+                                               t-value="4 if current_subsection and grouped_line['display_type'] != 'line_subsection' else
+                                                        3 if current_section and grouped_line['display_type'] != 'line_section' else
+                                                        0"/>
+                                            <t t-set="padding_class" t-value="line_padding and ('px-' + str(line_padding)) or ''"/>
+                                        </t>
+                                        <tr t-att-class="
+                                            'fw-bolder o_line_section' if grouped_line.get('display_type') == 'line_section' and not hide_details else
+                                            'fw-bold o_line_subsection' if grouped_line.get('display_type') == 'line_subsection' and not hide_details else
+                                            ''">
+                                            <!-- For desktop -->
+                                            <td name="account_invoice_line_name_grouped_desktop"
+                                                t-att-colspan="line_colspan"
+                                                t-attf-class="{{'d-none d-md-table-cell' if report_type == 'html' else ''}} {{padding_class}}">
+                                                <span t-out="grouped_line['name']" t-options="{'widget': 'text'}">Group 1</span>
+                                            </td>
+                                            <!-- For mobile -->
+                                            <td name="account_invoice_line_name_grouped"
+                                                t-att-colspan="2 if grouped_line['display_type'] != 'product' else 1"
+                                                t-attf-class="{{'d-md-none d-table-cell' if report_type == 'html' else 'd-none'}} {{padding_class}}">
+                                                <span t-out="grouped_line['name']" t-options="{'widget': 'text'}">Group 1</span>
+                                            </td>
+                                            <td name="td_quantity_grouped"
+                                                colspan="1"
+                                                t-if="hide_details or (hide_prices and grouped_line['display_type'] not in ('line_section', 'line_subsection'))"
+                                                class="o_td_quantity text-end">
+                                                <!-- If line is hide composition, always show 1 unit -->
+                                                <div t-if="hide_details">
+                                                    <span>1.00</span>
+                                                    <span groups="uom.group_uom">Units</span>
+                                                </div>
+                                                <!-- Else, show the line quantity -->
+                                                <div t-if="hide_prices and grouped_line['display_type'] not in ('line_section', 'line_subsection')">
+                                                    <span t-out="grouped_line['quantity']" t-options="{'widget': 'float', 'decimal_precision': 'Product Unit'}">1.00</span>
+                                                    <t t-if="grouped_line.get('line_uom')">
+                                                        <span t-out="grouped_line['line_uom'].display_name" groups="uom.group_uom">Unit</span>
+                                                        <span t-if="grouped_line.get('product_uom') != grouped_line['line_uom']" groups="uom.group_uom" class="text-muted small">
+                                                            <br/>
+                                                            <t t-set="product_uom_qty" t-value="grouped_line['line_uom']._compute_quantity(grouped_line['quantity'], grouped_line['product_uom'])"/>
+                                                            <span t-out="product_uom_qty" t-options="{'widget': 'float', 'decimal_precision': 'Product Unit'}" data-oe-demo="3.00"/> <span t-out="grouped_line['product_uom'].display_name" data-oe-demo="units"/>
+                                                        </span>
+                                                    </t>
+                                                </div>
+                                            </td>
+                                            <td name="td_price_unit_grouped"
+                                                t-if="grouped_line['display_type'] not in ('line_section', 'line_subsection')"
+                                                colspan="1"
+                                                t-attf-class="text-end {{ 'd-none d-md-table-cell' if report_type == 'html' else '' }}">
+                                                <span t-if="not hide_prices" t-out="grouped_line['price_subtotal']" t-options="{'widget': 'float', 'decimal_precision': 'Product Price'}" class="text-nowrap">9.00</span>
+                                            </td>
+                                            <td name="td_discount_grouped"
+                                                t-if="display_discount and grouped_line['display_type'] == 'product'"
+                                                colspan="1"
+                                                t-attf-class="text-end {{ 'd-none d-md-table-cell' if report_type == 'html' else '' }}"/>
+                                            <td name="td_taxes_grouped"
+                                                colspan="1"
+                                                t-if="display_taxes and (grouped_line['display_type'] == 'product' or grouped_line.get('taxes'))"
+                                                t-attf-class="text-end {{'d-none d-md-table-cell' if report_type == 'html' else ''}}">
+                                                <span t-if="grouped_line.get('taxes')" t-out="','.join(grouped_line['taxes'])" id="grouped_line_tax_ids">Tax 15%</span>
+                                            </td>
+                                            <td name="td_subtotal_grouped" colspan="1" class="text-end o_price_total">
+                                                <span t-if="(grouped_line.get('display_type') in ('line_section', 'line_subsection') or hide_details) and o.company_price_include == 'tax_excluded'" class="text-nowrap" t-out="grouped_line['price_subtotal']" t-options='{"widget": "monetary", "display_currency": o.currency_id}'>27.00</span>
+                                                <span t-if="(grouped_line.get('display_type') in ('line_section', 'line_subsection') or hide_details) and o.company_price_include == 'tax_included'" class="text-nowrap" t-out="grouped_line['price_total']" t-options='{"widget": "monetary", "display_currency": o.currency_id}'>31.05</span>
+                                            </td>
+                                        </tr>
+                                    </t>
+                                </t>
+                            </t>
+                        </tbody>
+                    </table>
+
+                    <div class="overflow-hidden">
+                        <div id="right-elements" t-attf-class="#{'col-5 mt-5' if report_type == 'pdf' else 'col-12 col-md-5'} ms-5 d-inline-block float-end">
+                            <div id="total" class="clearfix row">
+                                <div class="ms-auto">
+                                    <table class="o_total_table table table-borderless avoid-page-break-inside">
+
+                                        <!-- Tax totals summary (invoice currency) -->
+                                        <t t-if="o.tax_totals" t-call="account.document_tax_totals">
+                                            <t t-set="tax_totals" t-value="o.tax_totals"/>
+                                            <t t-set="currency" t-value="o.currency_id"/>
+                                        </t>
+                                        <tr class="border-black o_total" t-if="o.currency_id">
+                                            <td><strong>Currency</strong></td>
+                                            <td class="text-end">
+                                                <t t-esc="o.currency_id.name"/>
+                                            </td>
+                                        </tr>
+
+                                        <!--Payments-->
+                                        <t t-if="print_with_payments">
+                                            <t t-if="o.payment_state != 'invoicing_legacy'">
+                                                <t t-set="payments_vals" t-value="o.sudo().invoice_payments_widget and o.sudo().invoice_payments_widget['content'] or []"/>
+                                                <t t-foreach="payments_vals" t-as="payment_vals">
+                                                    <tr t-if="payment_vals['is_exchange'] == 0">
+                                                        <td>
+                                                            <i class="oe_form_field text-end oe_payment_label">
+                                                                <t t-if="payment_vals['is_refund']">Reversed on </t>
+                                                                <t t-else="">Paid on </t>
+                                                                <t t-out="payment_vals['date']" t-options='{"widget": "date"}'>2021-09-19</t>
+                                                            </i>
+                                                        </td>
+                                                        <td class="text-end">
+                                                            <span t-out="payment_vals['amount']" t-options='{"widget": "monetary", "display_currency": o.currency_id}'>20.00</span>
+                                                        </td>
+                                                    </tr>
+                                                </t>
+                                                <t t-if="len(payments_vals) > 0">
+                                                    <tr class="fw-bold">
+                                                        <td>Amount Due</td>
+                                                        <td class="text-end">
+                                                            <span t-field="o.amount_residual">11.05</span>
+                                                        </td>
+                                                    </tr>
+                                                </t>
+                                            </t>
+                                        </t>
+                                    </table>
+                                </div>
+                            </div>
+                            <div class="mb-2">
+                                <p class="text-end lh-sm" t-if="o.company_id.display_invoice_amount_total_words">
+                                    Total amount in words: <br/>
+                                    <small class="text-muted lh-sm"><span t-field="o.amount_total_words">Thirty one dollar and Five cents</span></small>
+                                </p>
+                            </div>
+
+                            <!-- Tax totals summary (company currency) -->
+                            <t t-if="o.tax_totals and o.tax_totals.get('display_in_company_currency')">
+                                <t t-set="tax_totals" t-value="o.tax_totals"/>
+                                <t t-call="account.document_tax_totals_company_currency_template"/>
+                            </t>
+                            <t t-else="">
+                                <div class="oe_structure"/>
+                            </t>
+                        </div>
+                        <div id="payment_term" class="clearfix mt-3">
+<!--                                <div class="justify-text">-->
+<!--                                    <p t-if="not is_html_empty(o.fiscal_position_id.note)" name="note" class="mb-2">-->
+<!--                                        <span t-field="o.fiscal_position_id.note"/>-->
+<!--                                    </p>-->
+<!--                                </div>-->
+                            <div class="justify-text">
+                                <p t-if="not is_html_empty(o.taxes_legal_notes)" name="taxes_legal_notes" class="mb-2">
+                                    <span t-field="o.taxes_legal_notes"/>
+                                </p>
+                            </div>
+                            <t t-set="payment_term_details" t-value="o.payment_term_details"/>
+                            <div class="mb-3">
+<!--                                    <span id="payment_terms_note_id"-->
+<!--                                          t-if="o.invoice_payment_term_id.note"-->
+<!--                                          t-field="o.invoice_payment_term_id.note"-->
+<!--                                          name="payment_term">Payment within 30 calendar day</span><br/>-->
+                                <t t-if="o.invoice_payment_term_id.display_on_invoice and payment_term_details">
+                                    <div t-if='o.show_payment_term_details' id="total_payment_term_details_table" class="row">
+                                        <div t-attf-class="#{'col-10' if report_type != 'html' else 'col-sm-10 col-md-9'}">
+                                            <t t-if="o._is_eligible_for_early_payment_discount(o.currency_id,o.invoice_date)">
+                                                <td>
+                                                    <span t-options='{"widget": "monetary", "display_currency": o.currency_id}'
+                                                          t-out="o.invoice_payment_term_id._get_amount_due_after_discount(o.amount_total, o.amount_tax)">30.00</span> due if paid before
+                                                    <span t-out="o.invoice_payment_term_id._get_last_discount_date_formatted(o.invoice_date)">2024-01-01</span>
+                                                </td>
+                                            </t>
+                                            <t t-if="len(payment_term_details) > 1" t-foreach="payment_term_details" t-as="term">
+                                                <div>
+                                                    <span t-out="term_index + 1">1</span> - Installment of
+                                                    <t t-options='{"widget": "monetary", "display_currency": o.currency_id}' t-out="term.get('amount')" class="text-end">31.05</t>
+                                                    <span> due on </span>
+                                                    <t t-out="term.get('date')" class="text-start">2024-01-01</t>
+                                                </div>
+                                            </t>
+                                        </div>
+                                    </div>
+                                </t>
+                            </div>
+                            <div class="mb-3" t-if="o.move_type in ('out_invoice', 'in_refund') and o.payment_reference">
+                                <p name="payment_communication">
+                                    Payment Communication: <span class="fw-bold" t-field="o.payment_reference">INV/2023/00001</span>
+                                    <t t-if="o.partner_bank_id">
+                                        <br/> on this account: <span t-field="o.partner_bank_id" class="fw-bold"/>
+                                    </t>
+                                </p>
+                            </div>
+                            <t t-set="show_qr" t-value="o.display_qr_code and o.amount_residual"/>
+                            <div t-if="not show_qr" name="qr_code_placeholder" class="oe_structure"></div>
+                            <div id="qrcode" class="d-flex mb-3 avoid-page-break-inside" t-else="">
+                                <div class="qrcode me-3" id="qrcode_image">
+                                    <t t-set="qr_code_url" t-value="o._generate_qr_code(silent_errors=True)"/>
+                                    <p t-if="qr_code_url" class="position-relative mb-0">
+                                        <img t-att-src="qr_code_url"/>
+                                        <img src="/account/static/src/img/Odoo_logo_O.svg"
+                                             id="qrcode_odoo_logo"
+                                             class="top-50 start-50 position-absolute bg-white border border-3 rounded-circle"
+                                        />
+                                    </p>
+                                </div>
+                                <div class="d-inline text-muted lh-sm fst-italic" id="qrcode_info" t-if="qr_code_url">
+                                    <p>Scan this QR Code with<br/>your banking application</p>
+                                </div>
+                            </div>
+                            <t t-set="show_link_qr" t-value="o.display_link_qr_code and o.amount_residual"/>
+                            <div t-if="show_link_qr" id="payment_link_qrcode" class="d-flex mb-3 avoid-page-break-inside">
+                                <t t-set="portal_qr_code" t-value="o._generate_portal_payment_qr()"/>
+                                <div class="qrcode me-3 position-relative" id="qrcode_image">
+                                    <a t-att-href="o._get_portal_payment_link()" target="_blank" class="top-0 start-0 position-absolute w-100 h-100 z-1" />
+                                    <p class="position-relative mb-0">
+                                        <img t-att-src="portal_qr_code"/>
+                                        <img src="/account/static/src/img/Odoo_logo_O.svg"
+                                             id="qrcode_odoo_logo"
+                                             class="top-50 start-50 position-absolute bg-white border border-3 rounded-circle"
+                                        />
+                                    </p>
+                                </div>
+                                <div class="d-inline lh-sm" id="qrcode_info" t-if="portal_qr_code">
+                                    <p class="fw-bold mb-0">PAY IN A FLASH!</p>
+                                    <p class="text-muted fst-italic">Scan the QR code<br/>or click to pay online</p>
+                                </div>
+                            </div>
+                            <!--terms and conditions-->
+                            <div class="text-muted mb-3" t-attf-style="#{'text-align:justify;text-justify:inter-word;' if o.company_id.terms_type != 'html' else ''}" t-if="not is_html_empty(o.narration)" name="comment">
+                                <span t-field="o.narration"/>
+                            </div>
+                            <div t-if="o.invoice_payment_term_id" name="payment_term">
+                                <span t-field="o.invoice_payment_term_id.note"/>
+                            </div>
+                            <div t-if="o.fiscal_position_id.note" name="note">
+                                <span t-field="o.fiscal_position_id.note"/>
+                            </div>
+                            <div class="row">
+                                <div class="col">
+                                    <span> </span>
+                                    <span>
+                                        <b>
+                                            <font class="text-delta" style="background-color: rgb(255, 255, 255);">Bank
+                                                Account Details:
+                                            </font>
+                                        </b>
+                                    </span>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col">
+                                    <span> </span>
+                                    <span>
+                                        <span style="font-weight: bolder;">
+                                            <span lang="FR"
+                                                  style="font-size: 8.5pt; font-family: LiberationSans; color: rgb(85, 85, 85);">
+                                                BENEFICIAIRE :
+                                            </span>
+                                        </span>
+                                        <span lang="FR"
+                                              style="font-size: 8.5pt; font-family: LiberationSans; color: rgb(85, 85, 85);">
+                                             NEXCONEC SAS <span style="font-weight: bolder;">BANQUE </span>: CIC ST
+                                            ETIENNE ENTREPRISES - <span style="font-weight: bolder;">SWIFT (BIC)
+                                            :</span> CMCIFRPP
+                                        </span>
+                                        <br/>
+                                        <span lang="FR"
+                                              style="font-size: 8.5pt; font-family: LiberationSans; color: rgb(85, 85, 85);">
+                                            <b>  ADRESSE BANQUE</b>
+                                            : 3 RUE A BRIAND ET DE LA PAIX, 42000 ST ETIENNE
+                                        </span>
+                                        <br/>
+                                        <span lang="FR"
+                                              style="font-size: 8.5pt; font-family: LiberationSans; color: rgb(85, 85, 85);">
+                                            <b>  IBAN EUR</b>
+                                            : FR76 1009 6180 1700 0930 8330 153
+                                        </span>
+                                        <br/>
+                                        <span lang="FR"
+                                              style="font-size: 8.5pt; font-family: LiberationSans; color: rgb(85, 85, 85);">
+                                            <b>  IBAN USD</b>
+                                            : FR76 1009 6180 1700 0930 8330 250
+                                        </span>
+                                        <br/>
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            </t>
+        </xpath>
+    </template>
+
+</odoo>

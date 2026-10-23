@@ -1,0 +1,62 @@
+<!--<?xml version="1.0" encoding="UTF-8" ?>-->
+<odoo>
+    <record id="view_account_voucher_wizard" model="ir.ui.view">
+        <field name="name">Advance Payment</field>
+        <field name="model">account.voucher.wizard</field>
+        <field name="type">form</field>
+        <field name="arch" type="xml">
+            <form string="Advance Payment">
+                <group>
+                    <field name="order_id" invisible="1" />
+                    <group >
+                        <field
+                            name="journal_id"
+                            domain="[('type','in',['bank', 'cash'])]"
+                            string="Journal" required="True"
+                        />
+                        <field name="payment_type" invisible="1"/>
+                        <field name="journal_currency_id" string="Currency" />
+                        <field name="payment_ref" />
+                        <field
+                            name="amount_total"
+                            string="Order Due Amount"
+                            readonly="True"
+                            invisible="1"
+                        />
+                    </group>
+<!--                    <separator string="Operation" colspan="4" />-->
+                    <group >
+<!--                        <label for="amount_advance" />-->
+<!--                        <div name="amount_div" class="o_row">-->
+<!--                            <field name="amount_advance"/>-->
+<!--                            <field name="currency_id" required="1" options="{'no_create': True, 'no_open': True}" groups="base.group_multi_currency"/>-->
+<!--                        </div>-->
+                        <field name="amount_advance" />
+                        <field name="date" />
+<!--                        <field-->
+<!--                            name="currency_amount"-->
+<!--                            string="Amount in Order Currency"-->
+<!--                            readonly="True"-->
+<!--                        />-->
+                    </group>
+                </group>
+                <footer>
+                    <button
+                        name="make_advance_payment"
+                        string="Make advance payment"
+                        type="object"
+                        class="btn-primary"
+                    />
+                    <button special="cancel" string="Cancel" class="btn-default" />
+                </footer>
+            </form>
+        </field>
+    </record>
+    <record id="action_view_account_voucher_wizard" model="ir.actions.act_window">
+        <field name="name">Register Advance Payment</field>
+        <field name="type">ir.actions.act_window</field>
+        <field name="res_model">account.voucher.wizard</field>
+        <field name="view_mode">form</field>
+        <field name="target">new</field>
+    </record>
+</odoo>

@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <template id="navigation_buttons" inherit_id="website_sale.navigation_buttons">
+        <xpath expr="//a[@name='website_sale_main_button']" position="before">
+            <a role="button"
+               t-if="website_sale_order"
+               t-att-href="website_sale_order.get_portal_url(report_type='pdf', download=True)" 
+               class="btn btn-secondary mb32  d-xl-inline-block">
+                <span class="fa fa-download"/>
+                <span class="">Print Quotation</span>
+            </a>
+        </xpath>
+    </template>
+</odoo>

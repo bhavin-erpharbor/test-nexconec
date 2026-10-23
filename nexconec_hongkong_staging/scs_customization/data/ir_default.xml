@@ -1,0 +1,13 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<odoo>
+  <record id="studio_customization.delivery_lead_time_s_e908f91e-ab8d-461b-92a9-7643dec82b86" model="ir.default" context="{'studio': True}">
+    <field name="field_id" ref="product.field_product_supplierinfo__delay"/>
+    <field name="condition" eval="False"/>
+    <field name="json_value">"0"</field>
+  </record>
+  <record id="studio_customization.quantity_supplier_pr_d693d5b5-5413-4e29-86c0-d3a3d2548fd4" model="ir.default" context="{'studio': True}">
+    <field name="field_id" ref="product.field_product_supplierinfo__min_qty"/>
+    <field name="condition" eval="False"/>
+    <field name="json_value">"1.00"</field>
+  </record>
+</odoo>

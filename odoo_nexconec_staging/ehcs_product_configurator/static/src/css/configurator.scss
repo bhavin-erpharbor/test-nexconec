@@ -1,0 +1,70 @@
+/* Base configurator class */
+.o_sale_product_configurator_price {
+    width: 100px;
+}
+
+.o_sale_product_configurator_qty {
+    width: 240px;
+}
+
+/* Custom class */
+/* Table styling */
+#config_variant_table {
+    border-collapse: collapse;
+    width: 100%;
+    background-color: #f2f2f2;
+    border: 1px solid white;
+}
+
+/* Table header styling */
+#config_variant_table thead tr {
+    height: 45px !important;
+    background-color: #714B67;
+    color: white;
+    font-size: 14px;
+}
+
+#config_variant_table thead th {
+    text-align: center;
+}
+
+#config_variant_table tbody tr {
+    text-align: center;
+}
+
+/* Alternate row colors */
+#config_variant_table tbody tr:nth-child(even) {
+    background-color: #dddddd;
+}
+
+/* Hover effect */
+#config_variant_table tbody tr:hover {
+    background-color: white;
+    color: black;
+    border: 1px solid #f2f2f2;
+}
+
+/* Table cell styling */
+#config_variant_table td {
+/*    padding: 10px;*/
+    border: 1px solid white;
+}
+
+/* Styling for the remove div */
+.js_remove_multi div {
+    color: white;
+    border: none;
+/*    padding: 5px 10px;*/
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+.js_remove_multi div:hover {
+    background-color: white;
+    color: black;
+}
+
+/* Small icons for buttons */
+.fa-trash-o {
+    font-size: 16px;
+}

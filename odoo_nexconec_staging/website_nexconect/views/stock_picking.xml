@@ -1,0 +1,23 @@
+<odoo>
+    <record id="view_picking_form_inherit_nexconec" model="ir.ui.view">
+        <field name="name">view.picking.form.inherit.nexconec</field>
+        <field name="model">stock.picking</field>
+        <field name="inherit_id" ref="stock.view_picking_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//group/group[2]" position="inside">
+                <field name="delivery_message" readonly="1"/>
+            </xpath>
+            <xpath expr="//notebook" position="inside">
+                 <page name="cable_info" string="Cable Cutting Info">
+                    <field name="cutting_info_ids">
+                        <list editable="bottom">
+                            <field name="product_id"/>
+                            <field name="no_of_piece"/>
+                            <field name="no_of_meter"/>
+                        </list>
+                    </field>
+                </page>
+            </xpath>
+        </field>
+    </record>
+</odoo>

@@ -1,0 +1,33 @@
+{
+    "name": "EHCS Nexconec Base",
+    "author": "ERP Harbor",
+    "version": "19.0.1.0.3",
+    "license": "LGPL-3",
+    "category": "EHCS Nexconec Base",
+    "description": "Product Variant",
+    'website': 'www.erpharbor.com',
+    'depends': ['purchase_stock', 'sale_management', 'crm', 'report_xlsx', 'sale_purchase'],
+    "data": [
+        'security/ir.model.access.csv',
+        'security/record_rule_data.xml',
+        'data/mail_template.xml',
+        'data/crm_lead_cron.xml',
+        'data/purchase_xls_report_action.xml',
+        'data/purchase_export_cron.xml',
+        'report/report.xml',
+        'report/label_report_template.xml',
+        'wizard/product_variant_stock_wizard_view.xml',
+        'wizard/product_label_layout_view.xml',
+        'views/visit_entry_view.xml',
+        'views/res_partner_view.xml',
+        'views/crm_lead_view.xml',
+        'views/purchase_order_view.xml',
+        'views/sale_view.xml',
+        'views/res_config_settings_view.xml',
+    ],
+    'assets': {
+        'web.assets_backend': [
+            # 'ehcs_nexconec_base/static/src/**/*',
+        ],
+    },
+}

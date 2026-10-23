@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <!-- ═══ Onglet "Digest Commercial" dans la fiche utilisateur ═══ -->
+    <record id="view_users_form_digest" model="ir.ui.view">
+        <field name="name">res.users.form.digest</field>
+        <field name="model">res.users</field>
+        <field name="inherit_id" ref="base.view_users_form"/>
+        <field name="arch" type="xml">
+
+            <!-- Ajout d'un onglet après l'onglet "Préférences" -->
+            <xpath expr="//page[@name='preferences']" position="after">
+                <page string="🎯 Objectifs Digest" name="digest_preferences">
+
+                    <group string="Activation">
+                        <field name="digest_enabled"
+                               string="Recevoir le digest commercial hebdomadaire"/>
+                    </group>
+
+                    <group string="Objectifs de facturation"
+                           invisible="not digest_enabled">
+                        <group>
+                            <field name="digest_target_invoicing_month"
+                                   string="Objectif mensuel (€)"
+                                   widget="monetary"/>
+                        </group>
+                        <group>
+                            <field name="digest_target_invoicing_year"
+                                   string="Objectif annuel (€)"
+                                   widget="monetary"/>
+                        </group>
+                    </group>
+
+                </page>
+            </xpath>
+
+        </field>
+    </record>
+
+</odoo>

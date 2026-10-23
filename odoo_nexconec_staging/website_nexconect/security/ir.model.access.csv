@@ -1,0 +1,3 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_product_internal_reference,access_product_internal_reference,model_product_internal_reference,,1,1,1,1
+access_cable_cutting_info,access_cable_cutting_info,model_cable_cutting_info,,1,1,1,1

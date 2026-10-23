@@ -1,0 +1,147 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <template id="header_doc_links" name="Header Document Links">
+        <li t-if="not user_id._is_public()" t-attf-class="#{_item_class} dropdown">
+            <a href="#" role="button" data-bs-toggle="dropdown" t-attf-class="#{_link_class} font-weight-bold dropdown-toggle">
+                <span>My Docs</span>
+            </a>
+            <div t-attf-class="dropdown-menu js_usermenu #{_dropdown_menu_class}" role="menu">
+               <a href="/my/invoices" role="menuitem" class="dropdown-item">My Bills</a>
+               <a href="/my/purchase" role="menuitem" class="dropdown-item">My Purchase Orders</a>
+               <a href="/my/quotes" role="menuitem" class="dropdown-item">My Quotes</a>
+            </div>
+        </li>
+    </template>
+
+    <template id="template_header_default" inherit_id="website.template_header_default">
+        <xpath expr="//t[@t-call='portal.user_dropdown']" position="after">
+            <t t-call="website_nexconect.header_doc_links">
+                <t t-set="_item_class" t-value="'nav-item'"/>
+                <t t-set="_link_class" t-value="'nav-link'"/>
+                <t t-set="_dropdown_menu_class" t-value="'dropdown-menu-end'"/>
+            </t>
+        </xpath>
+    </template>
+
+    <template id="template_header_hamburger" inherit_id="website.template_header_hamburger">
+        <xpath expr="//t[@t-call='portal.user_dropdown']" position="after">
+            <t t-call="website_nexconect.header_doc_links">
+                <t t-set="_item_class" t-value="'nav-item ml-2'"/>
+                <t t-set="_link_class" t-value="'nav-link'"/>
+                <t t-set="_dropdown_menu_class" t-value="'position-absolute dropdown-menu-right'"/>
+            </t>
+        </xpath>
+    </template>
+
+    <template id="template_header_vertical" inherit_id="website.template_header_vertical">
+        <xpath expr="//t[@t-call='portal.user_dropdown']" position="after">
+            <t t-call="website_nexconect.header_doc_links">
+                <t t-set="_item_class" t-value="'nav-item mr-auto'"/>
+                <t t-set="_link_class" t-value="'nav-link'"/>
+                <t t-set="_dropdown_menu_class" t-value="'dropup mr-auto'"/>
+            </t>
+        </xpath>
+    </template>
+
+    <template id="template_header_vertical" inherit_id="website.template_header_vertical">
+        <xpath expr="//t[@t-call='portal.user_dropdown']" position="after">
+            <t t-call="website_nexconect.header_doc_links">
+                <t t-set="_item_class" t-value="'nav-item ml-2'"/>
+                <t t-set="_link_class" t-value="'nav-link'"/>
+                <t t-set="_dropdown_menu_class" t-value="''"/>
+            </t>
+        </xpath>
+    </template>
+
+    <template id="template_header_sidebar" inherit_id="website.template_header_sidebar">
+        <xpath expr="//t[@t-call='portal.user_dropdown']" position="after">
+            <t t-call="website_nexconect.header_doc_links">
+                <t t-set="_item_class" t-value="'nav-item dropup mr-auto'"/>
+                <t t-set="_link_class" t-value="'nav-link'"/>
+                <t t-set="_dropdown_menu_class" t-value="'position-absolute dropdown-menu-left'"/>
+            </t>
+        </xpath>
+    </template>
+
+    <!-- TODO: this template is no longer available -->
+    <!-- <template id="template_header_slogan" inherit_id="website.template_header_slogan">
+        <xpath expr="//t[@t-call='portal.user_dropdown']" position="after">
+            <t t-call="website_nexconect.header_doc_links">
+                <t t-set="_item_class" t-value="'nav-item ml-2'"/>
+                <t t-set="_link_class" t-value="'nav-link'"/>
+                <t t-set="_dropdown_menu_class" t-value="''"/>
+            </t>
+        </xpath>
+    </template> -->
+
+    <!-- <template id="template_header_contact" inherit_id="website.template_header_contact">
+        <xpath expr="//t[@t-call='portal.user_dropdown']" position="after">
+            <t t-call="website_nexconect.header_doc_links">
+                <t t-set="_item_class" t-value="'nav-item ml-2'"/>
+                <t t-set="_link_class" t-value="'nav-link'"/>
+                <t t-set="_dropdown_menu_class" t-value="''"/>
+            </t>
+        </xpath>
+    </template>
+
+    <template id="template_header_minimalist" inherit_id="website.template_header_minimalist">
+        <xpath expr="//t[@t-call='portal.user_dropdown']" position="after">
+            <t t-call="website_nexconect.header_doc_links">
+                <t t-set="_item_class" t-value="'nav-item ml-2'"/>
+                <t t-set="_link_class" t-value="'nav-link'"/>
+                <t t-set="_dropdown_menu_class" t-value="''"/>
+            </t>
+        </xpath>
+    </template> -->
+
+    <template id="template_header_boxed" inherit_id="website.template_header_boxed">
+        <xpath expr="//t[@t-call='portal.user_dropdown']" position="after">
+            <t t-call="website_nexconect.header_doc_links">
+                <t t-set="_item_class" t-value="'nav-item ml-2'"/>
+                <t t-set="_link_class" t-value="'nav-link'"/>
+                <t t-set="_dropdown_menu_class" t-value="''"/>
+            </t>
+        </xpath>
+    </template>
+
+   <!--  <template id="template_header_centered_logo" inherit_id="website.template_header_centered_logo">
+        <xpath expr="//t[@t-call='portal.user_dropdown']" position="after">
+            <t t-call="website_nexconect.header_doc_links">
+                <t t-set="_item_class" t-value="'nav-item ml-2'"/>
+                <t t-set="_link_class" t-value="'nav-link'"/>
+                <t t-set="_dropdown_menu_class" t-value="''"/>
+            </t>
+        </xpath>
+    </template>
+
+    <template id="template_header_image" inherit_id="website.template_header_image">
+        <xpath expr="//t[@t-call='portal.user_dropdown']" position="after">
+            <t t-call="website_nexconect.header_doc_links">
+                <t t-set="_item_class" t-value="'nav-item ml-2'"/>
+                <t t-set="_link_class" t-value="'nav-link'"/>
+                <t t-set="_dropdown_menu_class" t-value="''"/>
+            </t>
+        </xpath>
+    </template>
+
+    <template id="template_header_hamburger_full" inherit_id="website.template_header_hamburger_full">
+        <xpath expr="//t[@t-call='portal.user_dropdown']" position="after">
+            <t t-call="website_nexconect.header_doc_links">
+                <t t-set="_item_class" t-value="'nav-item ml-2'"/>
+                <t t-set="_link_class" t-value="'nav-link'"/>
+                <t t-set="_dropdown_menu_class" t-value="''"/>
+            </t>
+        </xpath>
+    </template>
+
+    <template id="template_header_magazine" inherit_id="website.template_header_magazine">
+        <xpath expr="//t[@t-call='portal.user_dropdown']" position="after">
+            <t t-call="website_nexconect.header_doc_links">
+                <t t-set="_item_class" t-value="'nav-item ml-2'"/>
+                <t t-set="_link_class" t-value="'nav-link'"/>
+                <t t-set="_dropdown_menu_class" t-value="''"/>
+            </t>
+        </xpath>
+    </template> -->
+
+</odoo>
